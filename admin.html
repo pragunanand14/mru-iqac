@@ -3,56 +3,908 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IQAC Admin - Worklog</title>
+<title>IQAC Admin — Manav Rachna University</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="admin.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --mr-maroon:#7a1125;
+    --mr-maroon-dark:#5c0d1c;
+    --mr-navy:#122b52;
+    --mr-navy-dark:#0b1c38;
+    --mr-gold:#c79a3d;
+    --grey-bg:#eef0f2;
+    --border-grey:#dfe3e8;
+    --text-dark:#22303f;
+    --text-muted:#5c6b7a;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    font-family:'Inter','Segoe UI',sans-serif;
+    font-weight:400;
+    background: var(--grey-bg);
+    color: var(--text-dark);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    animation: pageIn 0.6s var(--ease);
+    position:relative;
+  }
+  @keyframes pageIn{ from{ opacity:0; } to{ opacity:1; } }
+
+  h1,h2,h3,h4,h5{
+    font-family:'Playfair Display', serif;
+    color: var(--mr-navy-dark);
+    margin:0;
+  }
+  p,li{ font-weight:400; }
+
+  /* ---- Ambient moving background ---- */
+  .ambient{
+    position:fixed;
+    border-radius:50%;
+    filter: blur(70px);
+    opacity:0.28;
+    pointer-events:none;
+    z-index:-1;
+    will-change: transform;
+    animation: floatSlow 24s ease-in-out infinite;
+  }
+  .ambient-one{
+    width:460px; height:460px;
+    background: radial-gradient(circle, var(--mr-maroon), transparent 70%);
+    top:-10%; left:-8%;
+  }
+  .ambient-two{
+    width:520px; height:520px;
+    background: radial-gradient(circle, var(--mr-navy), transparent 70%);
+    bottom:-14%; right:-10%;
+    animation-duration: 28s;
+    animation-direction: reverse;
+  }
+  @keyframes floatSlow{
+    0%{ transform: translate3d(0,0,0) scale(1); }
+    50%{ transform: translate3d(24px,-30px,0) scale(1.08); }
+    100%{ transform: translate3d(0,0,0) scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ambient{ animation:none !important; }
+  }
+
+  a{ text-decoration:none; color:inherit; }
+
+  /* ---- Header ---- */
+  .site-header{
+    background:#fff;
+    border-bottom:1px solid var(--border-grey);
+    box-shadow: 0 2px 10px rgba(11,28,56,0.05);
+    position:sticky; top:0; z-index:50;
+  }
+  .header-inner{
+    max-width:1200px; margin:0 auto;
+    padding:14px 30px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:14px;
+  }
+  .brand-mark{
+    flex:0 0 auto;
+    width:50px; height:50px;
+    border-radius:12px;
+    background: linear-gradient(135deg, var(--mr-maroon), var(--mr-maroon-dark));
+    color:#fff;
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:15px;
+    display:flex; align-items:center; justify-content:center;
+    letter-spacing:0.5px;
+    box-shadow: 0 6px 16px rgba(122,17,37,0.28);
+    transition: transform 0.35s var(--ease);
+  }
+  .brand:hover .brand-mark{ transform: scale(1.05) rotate(-2deg); }
+  .brand-university{
+    font-size:16px; font-weight:800; letter-spacing:0.3px;
+    color: var(--mr-navy-dark);
+    line-height:1.25;
+  }
+  .brand-unit{
+    font-size:11.5px; color: var(--text-muted);
+    letter-spacing:0.4px; text-transform:uppercase;
+    margin-top:2px;
+  }
+  .header-right{
+    display:flex; align-items:center; gap:14px;
+  }
+  .admin-badge{
+    display:inline-flex; align-items:center; gap:7px;
+    background: rgba(122,17,37,0.08);
+    border:1px solid rgba(122,17,37,0.2);
+    color: var(--mr-maroon);
+    font-size:11px; font-weight:700; letter-spacing:0.5px;
+    padding:6px 12px; border-radius:20px;
+  }
+  .admin-badge .dot{
+    width:7px; height:7px; border-radius:50%;
+    background: var(--mr-gold);
+    box-shadow: 0 0 0 0 rgba(199,154,61,0.6);
+    animation: dotPulse 1.6s ease-out infinite;
+  }
+  @keyframes dotPulse{
+    0%{ box-shadow: 0 0 0 0 rgba(199,154,61,0.55); }
+    70%{ box-shadow: 0 0 0 7px rgba(199,154,61,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(199,154,61,0); }
+  }
+  .view-site{
+    font-size:13px; font-weight:600;
+    color: var(--mr-navy);
+    display:inline-flex; align-items:center; gap:6px;
+    padding:8px 14px;
+    border:1px solid var(--border-grey);
+    border-radius:8px;
+    transition: all 0.3s var(--ease);
+  }
+  .view-site:hover{
+    background: var(--mr-navy);
+    color:#fff;
+    border-color: var(--mr-navy);
+    transform: translateY(-2px);
+  }
+  .logout{
+    font-family:inherit;
+    font-size:13px; font-weight:700;
+    color:#fff;
+    background: linear-gradient(135deg, var(--mr-maroon), var(--mr-maroon-dark));
+    border:none; border-radius:8px;
+    padding:9px 16px;
+    cursor:pointer;
+    box-shadow: 0 4px 12px rgba(122,17,37,0.25);
+    transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+  .logout:hover{ transform: translateY(-2px); box-shadow: 0 10px 20px rgba(122,17,37,0.3); }
+  .hidden{ display:none !important; }
+
+  /* ---- Nav ---- */
+  .mainnav{
+    background: linear-gradient(90deg, var(--mr-navy-dark), var(--mr-navy) 60%, var(--mr-maroon-dark));
+  }
+  .nav-inner{
+    max-width:1200px; margin:0 auto;
+    padding:0 30px;
+    display:flex; flex-wrap:wrap;
+    gap:4px;
+  }
+  .nav-inner a{
+    color: rgba(255,255,255,0.82);
+    font-size:13.5px; font-weight:600;
+    letter-spacing:0.2px;
+    padding:13px 16px;
+    position:relative;
+    transition: color 0.25s var(--ease);
+  }
+  .nav-inner a::after{
+    content:"";
+    position:absolute; left:16px; right:16px; bottom:0;
+    height:2.5px; background: var(--mr-gold);
+    transform: scaleX(0); transform-origin:left;
+    transition: transform 0.3s var(--ease);
+  }
+  .nav-inner a:hover{ color:#fff; }
+  .nav-inner a:hover::after{ transform:scaleX(1); }
+  .nav-inner a.active{ color:#fff; }
+  .nav-inner a.active::after{ transform:scaleX(1); }
+
+  /* ---- Page title bar ---- */
+  .page-title-bar{
+    background:#fff;
+    border-bottom:1px solid var(--border-grey);
+    padding:22px 30px;
+    max-width:1200px; margin:0 auto;
+  }
+  .breadcrumb{
+    font-size:12px; color: var(--text-muted);
+  }
+  .breadcrumb b{ color: var(--mr-maroon); }
+  .page-title-bar h1{
+    margin-top:6px;
+    font-size:26px; font-weight:700;
+  }
+  .page-title-bar p{
+    margin-top:6px;
+    font-size:13.5px; color: var(--text-muted);
+  }
+
+  .admin-page-intro{margin-bottom:30px;animation:fadeUp .5s var(--ease);}
+  .admin-page-intro h1{font-size:32px;margin-top:10px;}
+  .admin-page-intro p{margin-top:6px;font-size:13.5px;color:var(--text-muted);}
+
+  /* ---- Content wrap ---- */
+  .content-wrap{
+    max-width:1200px; margin:0 auto;
+    padding:34px 30px 60px;
+  }
+
+  /* ---- Cards ---- */
+  .card{
+    background:#fff;
+    border:1px solid var(--border-grey);
+    border-top:3px solid var(--mr-maroon);
+    border-radius:10px;
+    box-shadow: 0 2px 6px rgba(11,28,56,0.06);
+    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  }
+  .card:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px rgba(11,28,56,0.12);
+  }
+  .card-kicker{
+    font-size:11px; font-weight:700; letter-spacing:0.6px;
+    text-transform:uppercase; color: var(--mr-maroon);
+  }
+  .card-sub{
+    font-size:13px; color: var(--text-muted);
+    margin-top:4px;
+  }
+  .gold-line{
+    height:2px; width:46px;
+    background: var(--mr-gold);
+    margin:12px 0 18px;
+    border-radius:2px;
+  }
+
+  /* ---- Login layout ---- */
+  .login-layout{
+    display:grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap:48px;
+    align-items:center;
+    min-height:60vh;
+  }
+  @media (max-width: 860px){
+    .login-layout{ grid-template-columns:1fr; }
+  }
+  .login-intro{ padding:10px 6px; }
+  .eyebrow{
+    display:inline-block;
+    font-size:11px; font-weight:700; letter-spacing:1.2px;
+    text-transform:uppercase;
+    color: var(--mr-maroon);
+    background: rgba(122,17,37,0.07);
+    border:1px solid rgba(122,17,37,0.16);
+    padding:6px 12px; border-radius:20px;
+  }
+  .login-intro h2{
+    font-size:38px; line-height:1.2;
+    margin-top:18px;
+  }
+  .login-intro h2 em{
+    font-style:normal;
+    color: var(--mr-maroon);
+    position:relative;
+  }
+  .login-intro p{
+    margin-top:16px;
+    font-size:15px; color: var(--text-muted);
+    max-width:420px; line-height:1.65;
+  }
+  .intro-rule{
+    width:70px; height:3px;
+    background: linear-gradient(90deg, var(--mr-maroon), var(--mr-gold));
+    margin:24px 0; border-radius:3px;
+  }
+  .secure-note{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13px; color: var(--mr-navy-dark); font-weight:600;
+  }
+  .secure-note span{
+    width:22px; height:22px; border-radius:50%;
+    background: var(--mr-navy);
+    color:#fff; font-size:12px;
+    display:inline-flex; align-items:center; justify-content:center;
+  }
+
+  .login-card{
+    padding:34px 32px;
+    max-width:420px;
+    animation: fadeUp 0.6s var(--ease);
+  }
+  @keyframes fadeUp{
+    from{ opacity:0; transform: translateY(14px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+  .login-card h2{
+    font-size:24px; margin-top:6px;
+  }
+  .login-card form{
+    margin-top:22px;
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .login-card label{
+    font-size:12.5px; font-weight:600;
+    color: var(--mr-navy-dark);
+    display:flex; flex-direction:column; gap:7px;
+  }
+  input, select{
+    font-family:inherit;
+    font-size:14px;
+    padding:11px 13px;
+    border:1px solid var(--border-grey);
+    border-radius:8px;
+    background: var(--grey-bg);
+    color: var(--text-dark);
+    outline:none;
+    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.25s var(--ease);
+  }
+  input:focus, select:focus{
+    border-color: var(--mr-maroon);
+    background:#fff;
+    box-shadow: 0 0 0 3px rgba(122,17,37,0.12);
+  }
+  .primary{
+    font-family:inherit;
+    font-size:14px; font-weight:700;
+    color:#fff;
+    background: linear-gradient(135deg, var(--mr-maroon), var(--mr-maroon-dark));
+    border:none; border-radius:8px;
+    padding:12px 20px;
+    cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow: 0 6px 16px rgba(122,17,37,0.25);
+    transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), filter 0.25s var(--ease);
+  }
+  .primary:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(122,17,37,0.32);
+    filter:brightness(1.04);
+  }
+  .primary.full{ width:100%; }
+  .primary span{ transition: transform 0.25s var(--ease); }
+  .primary:hover span{ transform: translateX(3px); }
+
+  .secondary{
+    font-family:inherit;
+    font-size:14px; font-weight:600;
+    color: var(--mr-navy-dark);
+    background:#fff;
+    border:1px solid var(--border-grey);
+    border-radius:8px;
+    padding:12px 20px;
+    cursor:pointer;
+    transition: all 0.25s var(--ease);
+  }
+  .secondary:hover{
+    border-color: var(--mr-navy);
+    background: var(--grey-bg);
+  }
+
+  .message{
+    font-size:13px; font-weight:600;
+    min-height:18px;
+    color: var(--mr-maroon);
+  }
+  .message.success{ color:#1f7a4d; }
+
+  .login-footer{
+    margin-top:22px;
+    padding-top:16px;
+    border-top:1px solid var(--border-grey);
+    font-size:11.5px; color: var(--text-muted);
+    text-align:center;
+    letter-spacing:0.3px;
+  }
+
+  /* ---- Dashboard head ---- */
+  .dashboard-head{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:20px; flex-wrap:wrap;
+    margin-bottom:26px;
+    animation: fadeUp 0.5s var(--ease);
+  }
+  .dashboard-head h2{ font-size:28px; margin-top:8px; }
+  .dashboard-head p{
+    margin-top:6px; font-size:13.5px; color: var(--text-muted);
+  }
+  .add-btn{
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .add-btn span{
+    font-size:17px; line-height:1; font-weight:800;
+  }
+
+  /* ---- Stats row ---- */
+  .stats-row{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:16px;
+    margin-bottom:26px;
+  }
+  @media (max-width:760px){
+    .stats-row{ grid-template-columns:1fr; }
+  }
+  .stat{
+    padding:20px 20px 18px;
+    display:flex; flex-direction:column; gap:4px;
+    position:relative; overflow:hidden;
+  }
+  .stat::before{
+    content:"";
+    position:absolute; top:0; right:0;
+    width:90px; height:90px;
+    background: radial-gradient(circle, rgba(122,17,37,0.08), transparent 70%);
+  }
+  .stat-label{
+    font-size:10.5px; font-weight:700; letter-spacing:0.6px;
+    color: var(--text-muted);
+  }
+  .stat strong{
+    font-family:'Playfair Display', serif;
+    font-size:30px; color: var(--mr-navy-dark);
+    line-height:1.15;
+  }
+  .stat > span:last-child{
+    font-size:12px; color: var(--text-muted);
+  }
+
+  /* ---- Worklog card / table ---- */
+  .worklog-card{ padding:0; overflow:hidden; }
+  .table-heading{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap;
+    padding:20px 22px;
+    border-bottom:1px solid var(--border-grey);
+  }
+  .table-heading h3{ font-size:18px; }
+  .table-heading p{
+    margin-top:4px; font-size:12.5px; color: var(--text-muted);
+  }
+  .live-indicator{
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:11px; font-weight:700; letter-spacing:0.6px;
+    color:#1f7a4d;
+    background: rgba(31,122,77,0.08);
+    border:1px solid rgba(31,122,77,0.22);
+    padding:6px 12px; border-radius:20px;
+  }
+  .live-indicator i{
+    width:7px; height:7px; border-radius:50%;
+    background:#1f9d5e;
+    display:inline-block;
+    box-shadow: 0 0 0 0 rgba(31,157,94,0.6);
+    animation: dotPulse2 1.6s ease-out infinite;
+  }
+  @keyframes dotPulse2{
+    0%{ box-shadow: 0 0 0 0 rgba(31,157,94,0.55); }
+    70%{ box-shadow: 0 0 0 7px rgba(31,157,94,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(31,157,94,0); }
+  }
+
+  .table-wrap{ overflow-x:auto; }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+  }
+  thead th{
+    text-align:left;
+    font-size:11px; font-weight:700; letter-spacing:0.5px;
+    text-transform:uppercase;
+    color: var(--text-muted);
+    background: var(--grey-bg);
+    padding:12px 22px;
+    border-bottom:1px solid var(--border-grey);
+    white-space:nowrap;
+  }
+  thead th.actions{ text-align:right; }
+  tbody td{
+    padding:14px 22px;
+    border-bottom:1px solid var(--border-grey);
+    color: var(--text-dark);
+    vertical-align:top;
+  }
+  tbody tr{ transition: background 0.25s var(--ease); }
+  tbody tr:hover{ background: rgba(122,17,37,0.03); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.actions{ text-align:right; white-space:nowrap; }
+
+  .status-pill{
+    display:inline-block;
+    font-size:11px; font-weight:700; letter-spacing:0.3px;
+    padding:4px 11px; border-radius:20px;
+  }
+  .status-active{ background: rgba(31,122,77,0.1); color:#1f7a4d; border:1px solid rgba(31,122,77,0.25); }
+  .status-completed{ background: rgba(18,43,82,0.08); color: var(--mr-navy); border:1px solid rgba(18,43,82,0.2); }
+  .status-upcoming{ background: rgba(199,154,61,0.14); color:#8a6a1f; border:1px solid rgba(199,154,61,0.35); }
+
+  td.actions a, td.actions button{
+    font-size:12px; font-weight:700;
+    color: var(--mr-navy);
+    background:none; border:none; cursor:pointer;
+    padding:5px 8px;
+    margin-left:4px;
+    border-radius:6px;
+    transition: all 0.2s var(--ease);
+  }
+  td.actions a:hover, td.actions button:hover{
+    background: rgba(18,43,82,0.08);
+  }
+  td.actions [data-delete], .danger{
+    color: var(--mr-maroon) !important;
+  }
+  td.actions [data-delete]:hover, .danger:hover{
+    background: rgba(122,17,37,0.08) !important;
+  }
+
+  /* ---- Modal ---- */
+  .modal{
+    position:fixed; inset:0; z-index:200;
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .modal-backdrop{
+    position:absolute; inset:0;
+    background: rgba(11,28,56,0.55);
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.25s var(--ease);
+  }
+  @keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
+  .modal-card{
+    position:relative;
+    background:#fff;
+    width:100%; max-width:460px;
+    border-radius:12px;
+    border-top:4px solid var(--mr-maroon);
+    box-shadow: 0 30px 60px rgba(11,28,56,0.35);
+    padding:26px 26px 24px;
+    animation: modalIn 0.3s var(--ease);
+  }
+  @keyframes modalIn{
+    from{ opacity:0; transform: translateY(18px) scale(0.98); }
+    to{ opacity:1; transform: translateY(0) scale(1); }
+  }
+  .modal-head{
+    display:flex; align-items:flex-start; justify-content:space-between;
+    gap:12px;
+  }
+  .modal-head h3{ font-size:20px; margin-top:4px; }
+  .close{
+    background:none; border:none;
+    font-size:22px; line-height:1;
+    color: var(--text-muted);
+    cursor:pointer;
+    padding:2px 6px;
+    border-radius:6px;
+    transition: all 0.2s var(--ease);
+  }
+  .close:hover{ background: var(--grey-bg); color: var(--mr-maroon); }
+
+  #worklogForm{ display:flex; flex-direction:column; gap:16px; }
+  #worklogForm label{
+    font-size:12.5px; font-weight:600;
+    color: var(--mr-navy-dark);
+    display:flex; flex-direction:column; gap:7px;
+  }
+  .form-actions{
+    display:flex; justify-content:flex-end; gap:10px;
+    margin-top:6px;
+  }
+
+  /* ---- Footer ---- */
+  footer{
+    background: linear-gradient(90deg, var(--mr-navy-dark), var(--mr-navy) 60%, var(--mr-maroon-dark));
+    color: rgba(255,255,255,0.85);
+    text-align:center;
+    font-size:12.5px;
+    padding:26px 20px 30px;
+    line-height:1.8;
+  }
+  footer b{ color:#fff; }
+</style>
 </head>
 <body>
-<div class="page">
-  <header class="topbar">
-    <div><div class="eyebrow">MANAV RACHNA UNIVERSITY</div><h1>IQAC Admin</h1></div>
-    <div class="top-actions"><a href="index.html">View Website</a><button id="logoutBtn" class="ghost hidden">Logout</button></div>
-  </header>
+<div class="ambient ambient-one"></div>
+<div class="ambient ambient-two"></div>
 
-  <main>
-    <section id="loginView" class="panel login-panel">
-      <h2>Admin Login</h2>
-      <p>Sign in to manage the IQAC Worklog.</p>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html" aria-label="Manav Rachna University IQAC">
+      <div class="brand-mark">MRU</div>
+      <div>
+        <div class="brand-university">MANAV RACHNA UNIVERSITY</div>
+        <div class="brand-unit">Internal Quality Assurance Cell</div>
+      </div>
+    </a>
+    <div class="header-right">
+      <span class="admin-badge"><span class="dot"></span> IQAC ADMIN PORTAL</span>
+      <button id="logoutBtn" class="logout hidden">Logout</button>
+    </div>
+  </div>
+</header>
+
+
+
+<main class="content-wrap">
+  <div class="admin-page-intro">
+    <div class="eyebrow">MANAV RACHNA UNIVERSITY · IQAC</div>
+    <h1>Administration Portal</h1>
+    <p>Internal tools for maintaining IQAC website content.</p>
+  </div>
+  <section id="loginView" class="login-layout">
+    <div class="login-intro">
+      <span class="eyebrow">INTERNAL QUALITY ASSURANCE CELL</span>
+      <h2>IQAC<br><em>Administration.</em></h2>
+      <p>Manage the IQAC Worklog and keep the public-facing website up to date.</p>
+      <div class="intro-rule"></div>
+      <div class="secure-note"><span>✓</span> Restricted administrative access</div>
+    </div>
+    <div class="login-card card">
+      <div class="card-kicker">ADMINISTRATION</div>
+      <h2>Sign in</h2>
+      <p class="card-sub">Use your authorised IQAC account to continue.</p>
       <form id="loginForm">
-        <label>Email<input id="email" type="email" autocomplete="username" required></label>
-        <label>Password<input id="password" type="password" autocomplete="current-password" required></label>
-        <button class="primary" type="submit">Login</button>
+        <label>Email address
+          <input id="email" type="email" autocomplete="username" placeholder="admin@example.com" required>
+        </label>
+        <label>Password
+          <input id="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+        </label>
+        <button class="primary full" type="submit">Sign in <span>→</span></button>
         <div id="loginMessage" class="message"></div>
       </form>
-    </section>
+      <div class="login-footer">Manav Rachna University · IQAC</div>
+    </div>
+  </section>
 
-    <section id="adminView" class="hidden">
-      <div class="section-head"><div><h2>Worklog</h2><p>Add, edit, or remove IQAC activities.</p></div><button id="addBtn" class="primary">+ Add Worklog</button></div>
-      <div id="message" class="message"></div>
-      <div class="panel table-wrap">
-        <table><thead><tr><th>Date</th><th>Task</th><th>Status</th><th class="actions">Actions</th></tr></thead><tbody id="adminBody"></tbody></table>
+  <section id="adminView" class="hidden">
+    <div class="dashboard-head">
+      <div>
+        <div class="eyebrow">WORKLOG MANAGEMENT</div>
+        <h2>IQAC Worklog</h2>
+        <p>Track and publish IQAC activities, one update at a time.</p>
       </div>
-    </section>
-  </main>
-</div>
+      <button id="addBtn" class="primary add-btn"><span>+</span> Add Worklog</button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat card"><span class="stat-label">PUBLIC UPDATES</span><strong id="totalStat">—</strong><span>Worklog entries</span></div>
+      <div class="stat card"><span class="stat-label">STATUS</span><strong>Live</strong><span>Changes publish to website</span></div>
+      <div class="stat card"><span class="stat-label">ACCESS</span><strong>Admin</strong><span>Authorised account</span></div>
+    </div>
+
+    <div id="message" class="message"></div>
+    <div class="worklog-card card">
+      <div class="table-heading">
+        <div><h3>Activity records</h3><p>Newest entries appear first.</p></div>
+        <span class="live-indicator"><i></i> LIVE</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Activity / Task</th><th>Status</th><th class="actions">Actions</th></tr></thead>
+          <tbody id="adminBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div>Internal Administration Portal — <b>Manav Rachna University</b></div>
+  <div>Internal Quality Assurance Cell · Restricted Access</div>
+</footer>
 
 <div id="modal" class="modal hidden">
+  <div class="modal-backdrop"></div>
   <div class="modal-card">
-    <div class="modal-head"><h3 id="modalTitle">Add Worklog</h3><button id="closeModal" class="close">×</button></div>
+    <div class="modal-head">
+      <div><span class="card-kicker">WORKLOG</span><h3 id="modalTitle">Add Worklog</h3></div>
+      <button id="closeModal" class="close" aria-label="Close">×</button>
+    </div>
+    <div class="gold-line"></div>
     <form id="worklogForm">
       <input type="hidden" id="recordId">
       <label>Date<input id="workDate" type="date" required></label>
-      <label>Task<input id="workTask" type="text" maxlength="300" required></label>
+      <label>Task<input id="workTask" type="text" maxlength="300" placeholder="Describe the IQAC activity…" required></label>
       <label>Status<select id="workStatus" required><option>Active</option><option>Completed</option><option>Upcoming</option></select></label>
-      <div class="form-actions"><button type="button" id="cancelBtn" class="secondary">Cancel</button><button type="submit" class="primary">Save</button></div>
+      <div class="form-actions"><button type="button" id="cancelBtn" class="secondary">Cancel</button><button type="submit" class="primary">Save Worklog <span>→</span></button></div>
     </form>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js?v=4"></script>
-<script src="admin.js?v=4"></script>
+<script>\n\n\n
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+const $ = (id) => document.getElementById(id);
+let records = [];
+
+function setMessage(text, type=''){
+  const el=$('message');
+  if(el){ el.textContent=text; el.className='message '+type; }
+}
+function setLoginMessage(text, type=''){
+  const el=$('loginMessage');
+  if(el){ el.textContent=text; el.className='message '+type; }
+}
+function esc(v){
+  return String(v ?? '').replace(/[&<>'"]/g,ch=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'
+  }[ch]));
+}
+function statusClass(s){ return String(s || '').toLowerCase(); }
+function formatDate(d){
+  return d ? new Date(d+'T00:00:00').toLocaleDateString('en-GB') : '';
+}
+
+async function init(){
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(session) showAdmin(); else showLogin();
+
+  supabaseClient.auth.onAuthStateChange((_event, session)=>{
+    session ? showAdmin() : showLogin();
+  });
+}
+
+function showLogin(){
+  $('loginView').classList.remove('hidden');
+  $('adminView').classList.add('hidden');
+  $('logoutBtn').classList.add('hidden');
+}
+
+async function showAdmin(){
+  $('loginView').classList.add('hidden');
+  $('adminView').classList.remove('hidden');
+  $('logoutBtn').classList.remove('hidden');
+  await loadRecords();
+}
+
+$('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  setLoginMessage('Signing in…');
+
+  const {error}=await supabaseClient.auth.signInWithPassword({
+    email:$('email').value.trim(),
+    password:$('password').value
+  });
+
+  if(error){
+    setLoginMessage(error.message,'error');
+    return;
+  }
+  setLoginMessage('');
+});
+
+$('logoutBtn').addEventListener('click',async()=>{
+  await supabaseClient.auth.signOut();
+});
+
+$('addBtn').addEventListener('click',()=>openModal());
+$('closeModal').addEventListener('click',closeModal);
+$('cancelBtn').addEventListener('click',closeModal);
+
+$('modal').addEventListener('click',e=>{
+  if(e.target===$('modal') || e.target.classList.contains('modal-backdrop')) closeModal();
+});
+
+async function loadRecords(){
+  setMessage('Loading…');
+
+  const {data,error}=await supabaseClient
+    .from('worklog')
+    .select('id,date,task,status')
+    .order('date',{ascending:false});
+
+  if(error){
+    setMessage('Could not load Worklog: '+error.message,'error');
+    updateStats([]);
+    return;
+  }
+
+  records=data||[];
+  render();
+  updateStats(records);
+  setMessage('');
+}
+
+function updateStats(rows){
+  const stat=$('totalStat');
+  if(stat) stat.textContent=rows.length;
+}
+
+function render(){
+  const body=$('adminBody');
+
+  if(!records.length){
+    body.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:30px">No Worklog entries yet.</td></tr>';
+    return;
+  }
+
+  body.innerHTML=records.map(r=>`
+    <tr>
+      <td>${esc(formatDate(r.date))}</td>
+      <td>${esc(r.task)}</td>
+      <td><span class="status-pill status-${esc(statusClass(r.status))}">${esc(r.status)}</span></td>
+      <td class="actions">
+        <button data-edit="${r.id}">Edit</button>
+        <button data-delete="${r.id}" class="danger">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+
+  body.querySelectorAll('[data-edit]').forEach(b=>{
+    b.onclick=()=>openModal(Number(b.dataset.edit));
+  });
+
+  body.querySelectorAll('[data-delete]').forEach(b=>{
+    b.onclick=()=>deleteRecord(Number(b.dataset.delete));
+  });
+}
+
+function openModal(id=null){
+  $('recordId').value=id||'';
+  $('modalTitle').textContent=id?'Edit Worklog':'Add Worklog';
+
+  if(id){
+    const r=records.find(x=>x.id===id);
+    if(!r) return;
+    $('workDate').value=r.date;
+    $('workTask').value=r.task;
+    $('workStatus').value=r.status;
+  }else{
+    $('worklogForm').reset();
+    $('workStatus').value='Active';
+  }
+
+  $('modal').classList.remove('hidden');
+  $('workDate').focus();
+}
+
+function closeModal(){
+  $('modal').classList.add('hidden');
+}
+
+$('worklogForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+
+  const id=$('recordId').value;
+  const payload={
+    date:$('workDate').value,
+    task:$('workTask').value.trim(),
+    status:$('workStatus').value
+  };
+
+  const result=id
+    ? await supabaseClient.from('worklog').update(payload).eq('id',id)
+    : await supabaseClient.from('worklog').insert(payload);
+
+  if(result.error){
+    alert(result.error.message);
+    return;
+  }
+
+  closeModal();
+  await loadRecords();
+});
+
+async function deleteRecord(id){
+  const r=records.find(x=>x.id===id);
+  if(!r || !confirm(`Delete this Worklog entry?\n\n${r.task}`)) return;
+
+  const {error}=await supabaseClient.from('worklog').delete().eq('id',id);
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  await loadRecords();
+}
+
+init();
+\n</script>
+
 </body>
 </html>
