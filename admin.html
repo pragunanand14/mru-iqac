@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IQAC Admin - Worklog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="page">
+  <header class="topbar">
+    <div><div class="eyebrow">MANAV RACHNA UNIVERSITY</div><h1>IQAC Admin</h1></div>
+    <div class="top-actions"><a href="index.html">View Website</a><button id="logoutBtn" class="ghost hidden">Logout</button></div>
+  </header>
+
+  <main>
+    <section id="loginView" class="panel login-panel">
+      <h2>Admin Login</h2>
+      <p>Sign in to manage the IQAC Worklog.</p>
+      <form id="loginForm">
+        <label>Email<input id="email" type="email" autocomplete="username" required></label>
+        <label>Password<input id="password" type="password" autocomplete="current-password" required></label>
+        <button class="primary" type="submit">Login</button>
+        <div id="loginMessage" class="message"></div>
+      </form>
+    </section>
+
+    <section id="adminView" class="hidden">
+      <div class="section-head"><div><h2>Worklog</h2><p>Add, edit, or remove IQAC activities.</p></div><button id="addBtn" class="primary">+ Add Worklog</button></div>
+      <div id="message" class="message"></div>
+      <div class="panel table-wrap">
+        <table><thead><tr><th>Date</th><th>Task</th><th>Status</th><th class="actions">Actions</th></tr></thead><tbody id="adminBody"></tbody></table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-card">
+    <div class="modal-head"><h3 id="modalTitle">Add Worklog</h3><button id="closeModal" class="close">×</button></div>
+    <form id="worklogForm">
+      <input type="hidden" id="recordId">
+      <label>Date<input id="workDate" type="date" required></label>
+      <label>Task<input id="workTask" type="text" maxlength="300" required></label>
+      <label>Status<select id="workStatus" required><option>Active</option><option>Completed</option><option>Upcoming</option></select></label>
+      <div class="form-actions"><button type="button" id="cancelBtn" class="secondary">Cancel</button><button type="submit" class="primary">Save</button></div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
