@@ -8,40 +8,714 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--mr-maroon:#7a1125;--mr-maroon-dark:#5c0d1c;--mr-navy:#122b52;--mr-navy-dark:#0b1c38;--mr-gold:#c79a3d;--grey-bg:#eef0f2;--border-grey:#dfe3e8;--text-dark:#22303f;--text-muted:#5c6b7a;--ease:cubic-bezier(0.22,1,0.36,1)}
-  *{box-sizing:border-box}body{margin:0;font-family:'Inter','Segoe UI',sans-serif;font-weight:400;background:var(--grey-bg);color:var(--text-dark);overflow-x:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;animation:pageIn .6s var(--ease);position:relative}@keyframes pageIn{from{opacity:0}to{opacity:1}}h1,h2,h3,h4,h5{font-family:'Playfair Display',serif;color:var(--mr-navy-dark);margin:0}p,li{font-weight:400}
-  .ambient{position:fixed;border-radius:50%;filter:blur(70px);opacity:.28;pointer-events:none;z-index:-1;will-change:transform;animation:floatSlow 24s ease-in-out infinite}.ambient-one{width:460px;height:460px;background:radial-gradient(circle,var(--mr-maroon),transparent 70%);top:-10%;left:-8%}.ambient-two{width:520px;height:520px;background:radial-gradient(circle,var(--mr-navy),transparent 70%);bottom:-14%;right:-10%;animation-duration:28s;animation-direction:reverse}@keyframes floatSlow{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(24px,-30px,0) scale(1.08)}100%{transform:translate3d(0,0,0) scale(1)}}@media (prefers-reduced-motion:reduce){.ambient{animation:none!important}}a{text-decoration:none;color:inherit}
-  .site-header{background:#fff;border-bottom:1px solid var(--border-grey);box-shadow:0 2px 10px rgba(11,28,56,.05);position:sticky;top:0;z-index:50}.header-inner{max-width:1200px;margin:0 auto;padding:14px 30px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center}.brand-logo{display:block;width:285px;height:auto;max-height:64px;object-fit:contain}.brand:hover .brand-logo{transform:scale(1.01)}.header-right{display:flex;align-items:center;gap:14px}.admin-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(122,17,37,.08);border:1px solid rgba(122,17,37,.2);color:var(--mr-maroon);font-size:11px;font-weight:700;letter-spacing:.5px;padding:6px 12px;border-radius:20px}.admin-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--mr-gold);box-shadow:0 0 0 0 rgba(199,154,61,.6);animation:dotPulse 1.6s ease-out infinite}@keyframes dotPulse{0%{box-shadow:0 0 0 0 rgba(199,154,61,.55)}70%{box-shadow:0 0 0 7px rgba(199,154,61,0)}100%{box-shadow:0 0 0 0 rgba(199,154,61,0)}}.view-site{font-size:13px;font-weight:600;color:var(--mr-navy);display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:1px solid var(--border-grey);border-radius:8px;transition:all .3s var(--ease)}.view-site:hover{background:var(--mr-navy);color:#fff;border-color:var(--mr-navy);transform:translateY(-2px)}.logout{font-family:inherit;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--mr-maroon),var(--mr-maroon-dark));border:none;border-radius:8px;padding:9px 16px;cursor:pointer;box-shadow:0 4px 12px rgba(122,17,37,.25);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}.logout:hover{transform:translateY(-2px);box-shadow:0 10px 20px rgba(122,17,37,.3)}.hidden{display:none!important}
-  .mainnav{background:linear-gradient(90deg,var(--mr-navy-dark),var(--mr-navy) 60%,var(--mr-maroon-dark))}.nav-inner{max-width:1200px;margin:0 auto;padding:0 30px;display:flex;flex-wrap:wrap;gap:4px}.nav-inner a{color:rgba(255,255,255,.82);font-size:13.5px;font-weight:600;letter-spacing:.2px;padding:13px 16px;position:relative;transition:color .25s var(--ease)}.nav-inner a::after{content:"";position:absolute;left:16px;right:16px;bottom:0;height:2.5px;background:var(--mr-gold);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}.nav-inner a:hover{color:#fff}.nav-inner a:hover::after{transform:scaleX(1)}.nav-inner a.active{color:#fff}.nav-inner a.active::after{transform:scaleX(1)}
-  .page-title-bar{background:#fff;border-bottom:1px solid var(--border-grey);padding:22px 30px;max-width:1200px;margin:0 auto}.breadcrumb{font-size:12px;color:var(--text-muted)}.breadcrumb b{color:var(--mr-maroon)}.page-title-bar h1{margin-top:6px;font-size:26px;font-weight:700}.page-title-bar p{margin-top:6px;font-size:13.5px;color:var(--text-muted)}.content-wrap{max-width:1200px;margin:0 auto;padding:34px 30px 60px}.card{background:#fff;border:1px solid var(--border-grey);border-top:3px solid var(--mr-maroon);border-radius:10px;box-shadow:0 2px 6px rgba(11,28,56,.06);transition:transform .35s var(--ease),box-shadow .35s var(--ease)}.card:hover{transform:translateY(-3px);box-shadow:0 16px 32px rgba(11,28,56,.12)}.card-kicker{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--mr-maroon)}.card-sub{font-size:13px;color:var(--text-muted);margin-top:4px}.gold-line{height:2px;width:46px;background:var(--mr-gold);margin:12px 0 18px;border-radius:2px}
-  .login-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;min-height:60vh}@media (max-width:860px){.login-layout{grid-template-columns:1fr}}.login-intro{padding:10px 6px}.eyebrow{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--mr-maroon);background:rgba(122,17,37,.07);border:1px solid rgba(122,17,37,.16);padding:6px 12px;border-radius:20px}.login-intro h2{font-size:38px;line-height:1.2;margin-top:18px}.login-intro h2 em{font-style:normal;color:var(--mr-maroon);position:relative}.login-intro p{margin-top:16px;font-size:15px;color:var(--text-muted);max-width:420px;line-height:1.65}.intro-rule{width:70px;height:3px;background:linear-gradient(90deg,var(--mr-maroon),var(--mr-gold));margin:24px 0;border-radius:3px}.secure-note{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--mr-navy-dark);font-weight:600}.secure-note span{width:22px;height:22px;border-radius:50%;background:var(--mr-navy);color:#fff;font-size:12px;display:inline-flex;align-items:center;justify-content:center}.login-card{padding:34px 32px;max-width:420px;animation:fadeUp .6s var(--ease)}@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}.login-card h2{font-size:24px;margin-top:6px}.login-card form{margin-top:22px;display:flex;flex-direction:column;gap:16px}.login-card label{font-size:12.5px;font-weight:600;color:var(--mr-navy-dark);display:flex;flex-direction:column;gap:7px}input,select,textarea{font-family:inherit;font-size:14px;padding:11px 13px;border:1px solid var(--border-grey);border-radius:8px;background:var(--grey-bg);color:var(--text-dark);outline:none;transition:border-color .25s var(--ease),box-shadow .25s var(--ease),background .25s var(--ease)}input:focus,select:focus,textarea:focus{border-color:var(--mr-maroon);background:#fff;box-shadow:0 0 0 3px rgba(122,17,37,.12)}textarea{resize:vertical;min-height:120px;line-height:1.55}.primary{font-family:inherit;font-size:14px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--mr-maroon),var(--mr-maroon-dark));border:none;border-radius:8px;padding:12px 20px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 6px 16px rgba(122,17,37,.25);transition:transform .25s var(--ease),box-shadow .25s var(--ease),filter .25s var(--ease)}.primary:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(122,17,37,.32);filter:brightness(1.04)}.primary.full{width:100%}.primary span{transition:transform .25s var(--ease)}.primary:hover span{transform:translateX(3px)}.secondary{font-family:inherit;font-size:14px;font-weight:600;color:var(--mr-navy-dark);background:#fff;border:1px solid var(--border-grey);border-radius:8px;padding:12px 20px;cursor:pointer;transition:all .25s var(--ease)}.secondary:hover{border-color:var(--mr-navy);background:var(--grey-bg)}.message{font-size:13px;font-weight:600;min-height:18px;color:var(--mr-maroon)}.message.success{color:#1f7a4d}.message.error{color:var(--mr-maroon)}.login-footer{margin-top:22px;padding-top:16px;border-top:1px solid var(--border-grey);font-size:11.5px;color:var(--text-muted);text-align:center;letter-spacing:.3px}
-  .dashboard-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:26px;animation:fadeUp .5s var(--ease)}.dashboard-head h2{font-size:28px;margin-top:8px}.dashboard-head p{margin-top:6px;font-size:13.5px;color:var(--text-muted)}.add-btn{display:inline-flex;align-items:center;gap:8px}.add-btn span{font-size:18px;line-height:1}.stat-card{padding:18px 20px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between}.stat-label{font-size:12px;color:var(--text-muted);font-weight:600}.stat-value{font-size:26px;font-weight:800;color:var(--mr-navy-dark);font-family:'Playfair Display',serif}.table-card{overflow:hidden}.table-head{padding:20px 22px;display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--border-grey)}.table-head h3{font-size:20px}.live-badge{font-size:10px;font-weight:800;letter-spacing:.7px;color:#1f7a4d;background:rgba(31,122,77,.08);border:1px solid rgba(31,122,77,.18);padding:5px 9px;border-radius:15px}.table-wrap{width:100%;overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:900px}th,td{text-align:left;padding:14px 16px;border-bottom:1px solid var(--border-grey);vertical-align:top;font-size:13px}th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);background:#fafbfc}tbody tr:hover{background:#fbfcfd}.title-cell{width:24ch;max-width:24ch;white-space:normal;overflow-wrap:break-word;word-break:normal;line-height:1.5;font-weight:600;color:var(--mr-navy-dark)}.task-cell{width:50ch;max-width:50ch;white-space:normal;overflow-wrap:break-word;word-break:normal;line-height:1.55;color:var(--text-dark)}.status-pill{display:inline-flex;align-items:center;font-size:11px;font-weight:700;padding:5px 9px;border-radius:20px;white-space:nowrap}.status-active{color:#9a5b00;background:#fff5df;border:1px solid #f1d49a}.status-completed{color:#1f7a4d;background:#eaf7f0;border:1px solid #bfe6cf}.status-upcoming{color:#315d9b;background:#edf4ff;border:1px solid #c6daf7}.actions{white-space:nowrap}.actions button{font-family:inherit;font-size:12px;font-weight:700;border:1px solid var(--border-grey);background:#fff;color:var(--mr-navy);border-radius:7px;padding:7px 10px;cursor:pointer;margin-right:5px;transition:all .2s var(--ease)}.actions button:hover{border-color:var(--mr-maroon);color:var(--mr-maroon);transform:translateY(-1px)}footer{max-width:1200px;margin:0 auto;padding:22px 30px 34px;font-size:11.5px;color:var(--text-muted);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
-  .modal{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}.modal-backdrop{position:absolute;inset:0;background:rgba(11,28,56,.52);backdrop-filter:blur(4px)}.modal-card{position:relative;width:min(560px,100%);max-height:90vh;overflow:auto;background:#fff;border:1px solid var(--border-grey);border-top:3px solid var(--mr-maroon);border-radius:12px;box-shadow:0 24px 60px rgba(11,28,56,.25);padding:26px}.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}.modal-head h3{font-size:22px;margin-top:5px}.close{font-size:24px;line-height:1;border:none;background:transparent;color:var(--text-muted);cursor:pointer;padding:2px 6px}.modal-card form{display:flex;flex-direction:column;gap:15px}.modal-card label{font-size:12.5px;font-weight:600;color:var(--mr-navy-dark);display:flex;flex-direction:column;gap:7px}.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:4px}
-  @media(max-width:760px){.header-inner{padding:12px 18px}.brand-logo{width:220px;max-height:52px}.header-right{gap:8px}.admin-badge{display:none}.view-site{display:none}.nav-inner{padding:0 14px}.nav-inner a{font-size:12px;padding:11px 10px}.nav-inner a::after{left:10px;right:10px}.page-title-bar,.content-wrap,footer{padding-left:18px;padding-right:18px}.login-intro h2{font-size:32px}.login-card{max-width:none;padding:26px 22px}.title-cell{width:auto;max-width:24ch}.task-cell{width:auto;max-width:50ch}table{min-width:900px}.modal-card{padding:22px}}
+  :root{
+    --mr-maroon:#7a1125;
+    --mr-maroon-dark:#5c0d1c;
+    --mr-navy:#122b52;
+    --mr-navy-dark:#0b1c38;
+    --mr-gold:#c79a3d;
+    --grey-bg:#eef0f2;
+    --border-grey:#dfe3e8;
+    --text-dark:#22303f;
+    --text-muted:#5c6b7a;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    font-family:'Inter','Segoe UI',sans-serif;
+    font-weight:400;
+    background: var(--grey-bg);
+    color: var(--text-dark);
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    animation: pageIn 0.6s var(--ease);
+    position:relative;
+  }
+  @keyframes pageIn{ from{ opacity:0; } to{ opacity:1; } }
+
+  h1,h2,h3,h4,h5{
+    font-family:'Playfair Display', serif;
+    color: var(--mr-navy-dark);
+    margin:0;
+  }
+  p,li{ font-weight:400; }
+
+  /* ---- Ambient moving background ---- */
+  .ambient{
+    position:fixed;
+    border-radius:50%;
+    filter: blur(70px);
+    opacity:0.28;
+    pointer-events:none;
+    z-index:-1;
+    will-change: transform;
+    animation: floatSlow 24s ease-in-out infinite;
+  }
+  .ambient-one{
+    width:460px; height:460px;
+    background: radial-gradient(circle, var(--mr-maroon), transparent 70%);
+    top:-10%; left:-8%;
+  }
+  .ambient-two{
+    width:520px; height:520px;
+    background: radial-gradient(circle, var(--mr-navy), transparent 70%);
+    bottom:-14%; right:-10%;
+    animation-duration: 28s;
+    animation-direction: reverse;
+  }
+  @keyframes floatSlow{
+    0%{ transform: translate3d(0,0,0) scale(1); }
+    50%{ transform: translate3d(24px,-30px,0) scale(1.08); }
+    100%{ transform: translate3d(0,0,0) scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ambient{ animation:none !important; }
+  }
+
+  a{ text-decoration:none; color:inherit; }
+
+  /* ---- Header ---- */
+  .site-header{
+    background:#fff;
+    border-bottom:1px solid var(--border-grey);
+    box-shadow: 0 2px 10px rgba(11,28,56,0.05);
+    position:sticky; top:0; z-index:50;
+  }
+  .header-inner{
+    max-width:1200px; margin:0 auto;
+    padding:14px 30px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px;
+  }
+  .brand{
+    display:flex; align-items:center; gap:14px;
+  }
+  .brand-mark{
+    flex:0 0 auto;
+    width:50px; height:50px;
+    border-radius:12px;
+    background: linear-gradient(135deg, var(--mr-maroon), var(--mr-maroon-dark));
+    color:#fff;
+    font-family:'Playfair Display', serif;
+    font-weight:700;
+    font-size:15px;
+    display:flex; align-items:center; justify-content:center;
+    letter-spacing:0.5px;
+    box-shadow: 0 6px 16px rgba(122,17,37,0.28);
+    transition: transform 0.35s var(--ease);
+  }
+  .brand:hover .brand-mark{ transform: scale(1.05) rotate(-2deg); }
+  .brand-university{
+    font-size:16px; font-weight:800; letter-spacing:0.3px;
+    color: var(--mr-navy-dark);
+    line-height:1.25;
+  }
+  .brand-unit{
+    font-size:11.5px; color: var(--text-muted);
+    letter-spacing:0.4px; text-transform:uppercase;
+    margin-top:2px;
+  }
+  .header-right{
+    display:flex; align-items:center; gap:14px;
+  }
+  .admin-badge{
+    display:inline-flex; align-items:center; gap:7px;
+    background: rgba(122,17,37,0.08);
+    border:1px solid rgba(122,17,37,0.2);
+    color: var(--mr-maroon);
+    font-size:11px; font-weight:700; letter-spacing:0.5px;
+    padding:6px 12px; border-radius:20px;
+  }
+  .admin-badge .dot{
+    width:7px; height:7px; border-radius:50%;
+    background: var(--mr-gold);
+    box-shadow: 0 0 0 0 rgba(199,154,61,0.6);
+    animation: dotPulse 1.6s ease-out infinite;
+  }
+  @keyframes dotPulse{
+    0%{ box-shadow: 0 0 0 0 rgba(199,154,61,0.55); }
+    70%{ box-shadow: 0 0 0 7px rgba(199,154,61,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(199,154,61,0); }
+  }
+  .view-site{
+    font-size:13px; font-weight:600;
+    color: var(--mr-navy);
+    display:inline-flex; align-items:center; gap:6px;
+    padding:8px 14px;
+    border:1px solid var(--border-grey);
+    border-radius:8px;
+    transition: all 0.3s var(--ease);
+  }
+  .view-site:hover{
+    background: var(--mr-navy);
+    color:#fff;
+    border-color: var(--mr-navy);
+    transform: translateY(-2px);
+  }
+  .logout{
+    font-family:inherit;
+    font-size:13px; font-weight:700;
+    color:#fff;
+    background: linear-gradient(135deg, var(--mr-maroon), var(--mr-maroon-dark));
+    border:none; border-radius:8px;
+    padding:9px 16px;
+    cursor:pointer;
+    box-shadow: 0 4px 12px rgba(122,17,37,0.25);
+    transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  }
+  .logout:hover{ transform: translateY(-2px); box-shadow: 0 10px 20px rgba(122,17,37,0.3); }
+  .hidden{ display:none !important; }
+
+  /* ---- Nav ---- */
+  .mainnav{
+    background: linear-gradient(90deg, var(--mr-navy-dark), var(--mr-navy) 60%, var(--mr-maroon-dark));
+  }
+  .nav-inner{
+    max-width:1200px; margin:0 auto;
+    padding:0 30px;
+    display:flex; flex-wrap:wrap;
+    gap:4px;
+  }
+  .nav-inner a{
+    color: rgba(255,255,255,0.82);
+    font-size:13.5px; font-weight:600;
+    letter-spacing:0.2px;
+    padding:13px 16px;
+    position:relative;
+    transition: color 0.25s var(--ease);
+  }
+  .nav-inner a::after{
+    content:"";
+    position:absolute; left:16px; right:16px; bottom:0;
+    height:2.5px; background: var(--mr-gold);
+    transform: scaleX(0); transform-origin:left;
+    transition: transform 0.3s var(--ease);
+  }
+  .nav-inner a:hover{ color:#fff; }
+  .nav-inner a:hover::after{ transform:scaleX(1); }
+  .nav-inner a.active{ color:#fff; }
+  .nav-inner a.active::after{ transform:scaleX(1); }
+
+  /* ---- Page title bar ---- */
+  .page-title-bar{
+    background:#fff;
+    border-bottom:1px solid var(--border-grey);
+    padding:22px 30px;
+    max-width:1200px; margin:0 auto;
+  }
+  .breadcrumb{
+    font-size:12px; color: var(--text-muted);
+  }
+  .breadcrumb b{ color: var(--mr-maroon); }
+  .page-title-bar h1{
+    margin-top:6px;
+    font-size:26px; font-weight:700;
+  }
+  .page-title-bar p{
+    margin-top:6px;
+    font-size:13.5px; color: var(--text-muted);
+  }
+
+  /* ---- Content wrap ---- */
+  .content-wrap{
+    max-width:1200px; margin:0 auto;
+    padding:34px 30px 60px;
+  }
+
+  /* ---- Cards ---- */
+  .card{
+    background:#fff;
+    border:1px solid var(--border-grey);
+    border-top:3px solid var(--mr-maroon);
+    border-radius:10px;
+    box-shadow: 0 2px 6px rgba(11,28,56,0.06);
+    transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease);
+  }
+  .card:hover{
+    transform: translateY(-3px);
+    box-shadow: 0 16px 32px rgba(11,28,56,0.12);
+  }
+  .card-kicker{
+    font-size:11px; font-weight:700; letter-spacing:0.6px;
+    text-transform:uppercase; color: var(--mr-maroon);
+  }
+  .card-sub{
+    font-size:13px; color: var(--text-muted);
+    margin-top:4px;
+  }
+  .gold-line{
+    height:2px; width:46px;
+    background: var(--mr-gold);
+    margin:12px 0 18px;
+    border-radius:2px;
+  }
+
+  /* ---- Login layout ---- */
+  .login-layout{
+    display:grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap:48px;
+    align-items:center;
+    min-height:60vh;
+  }
+  @media (max-width: 860px){
+    .login-layout{ grid-template-columns:1fr; }
+  }
+  .login-intro{ padding:10px 6px; }
+  .eyebrow{
+    display:inline-block;
+    font-size:11px; font-weight:700; letter-spacing:1.2px;
+    text-transform:uppercase;
+    color: var(--mr-maroon);
+    background: rgba(122,17,37,0.07);
+    border:1px solid rgba(122,17,37,0.16);
+    padding:6px 12px; border-radius:20px;
+  }
+  .login-intro h2{
+    font-size:38px; line-height:1.2;
+    margin-top:18px;
+  }
+  .login-intro h2 em{
+    font-style:normal;
+    color: var(--mr-maroon);
+    position:relative;
+  }
+  .login-intro p{
+    margin-top:16px;
+    font-size:15px; color: var(--text-muted);
+    max-width:420px; line-height:1.65;
+  }
+  .intro-rule{
+    width:70px; height:3px;
+    background: linear-gradient(90deg, var(--mr-maroon), var(--mr-gold));
+    margin:24px 0; border-radius:3px;
+  }
+  .secure-note{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13px; color: var(--mr-navy-dark); font-weight:600;
+  }
+  .secure-note span{
+    width:22px; height:22px; border-radius:50%;
+    background: var(--mr-navy);
+    color:#fff; font-size:12px;
+    display:inline-flex; align-items:center; justify-content:center;
+  }
+
+  .login-card{
+    padding:34px 32px;
+    max-width:420px;
+    animation: fadeUp 0.6s var(--ease);
+  }
+  @keyframes fadeUp{
+    from{ opacity:0; transform: translateY(14px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+  .login-card h2{
+    font-size:24px; margin-top:6px;
+  }
+  .login-card form{
+    margin-top:22px;
+    display:flex; flex-direction:column; gap:16px;
+  }
+  .login-card label{
+    font-size:12.5px; font-weight:600;
+    color: var(--mr-navy-dark);
+    display:flex; flex-direction:column; gap:7px;
+  }
+  input, select{
+    font-family:inherit;
+    font-size:14px;
+    padding:11px 13px;
+    border:1px solid var(--border-grey);
+    border-radius:8px;
+    background: var(--grey-bg);
+    color: var(--text-dark);
+    outline:none;
+    transition: border-color 0.25s var(--ease), box-shadow 0.25s var(--ease), background 0.25s var(--ease);
+  }
+  input:focus, select:focus{
+    border-color: var(--mr-maroon);
+    background:#fff;
+    box-shadow: 0 0 0 3px rgba(122,17,37,0.12);
+  }
+  .primary{
+    font-family:inherit;
+    font-size:14px; font-weight:700;
+    color:#fff;
+    background: linear-gradient(135deg, var(--mr-maroon), var(--mr-maroon-dark));
+    border:none; border-radius:8px;
+    padding:12px 20px;
+    cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    box-shadow: 0 6px 16px rgba(122,17,37,0.25);
+    transition: transform 0.25s var(--ease), box-shadow 0.25s var(--ease), filter 0.25s var(--ease);
+  }
+  .primary:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(122,17,37,0.32);
+    filter:brightness(1.04);
+  }
+  .primary.full{ width:100%; }
+  .primary span{ transition: transform 0.25s var(--ease); }
+  .primary:hover span{ transform: translateX(3px); }
+
+  .secondary{
+    font-family:inherit;
+    font-size:14px; font-weight:600;
+    color: var(--mr-navy-dark);
+    background:#fff;
+    border:1px solid var(--border-grey);
+    border-radius:8px;
+    padding:12px 20px;
+    cursor:pointer;
+    transition: all 0.25s var(--ease);
+  }
+  .secondary:hover{
+    border-color: var(--mr-navy);
+    background: var(--grey-bg);
+  }
+
+  .message{
+    font-size:13px; font-weight:600;
+    min-height:18px;
+    color: var(--mr-maroon);
+  }
+  .message.success{ color:#1f7a4d; }
+
+  .login-footer{
+    margin-top:22px;
+    padding-top:16px;
+    border-top:1px solid var(--border-grey);
+    font-size:11.5px; color: var(--text-muted);
+    text-align:center;
+    letter-spacing:0.3px;
+  }
+
+  /* ---- Dashboard head ---- */
+  .dashboard-head{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:20px; flex-wrap:wrap;
+    margin-bottom:26px;
+    animation: fadeUp 0.5s var(--ease);
+  }
+  .dashboard-head h2{ font-size:28px; margin-top:8px; }
+  .dashboard-head p{
+    margin-top:6px; font-size:13.5px; color: var(--text-muted);
+  }
+  .add-btn{
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .add-btn span{
+    font-size:17px; line-height:1; font-weight:800;
+  }
+
+  /* ---- Stats row ---- */
+  .stats-row{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:16px;
+    margin-bottom:26px;
+  }
+  @media (max-width:760px){
+    .stats-row{ grid-template-columns:1fr; }
+  }
+  .stat{
+    padding:20px 20px 18px;
+    display:flex; flex-direction:column; gap:4px;
+    position:relative; overflow:hidden;
+  }
+  .stat::before{
+    content:"";
+    position:absolute; top:0; right:0;
+    width:90px; height:90px;
+    background: radial-gradient(circle, rgba(122,17,37,0.08), transparent 70%);
+  }
+  .stat-label{
+    font-size:10.5px; font-weight:700; letter-spacing:0.6px;
+    color: var(--text-muted);
+  }
+  .stat strong{
+    font-family:'Playfair Display', serif;
+    font-size:30px; color: var(--mr-navy-dark);
+    line-height:1.15;
+  }
+  .stat > span:last-child{
+    font-size:12px; color: var(--text-muted);
+  }
+
+  /* ---- Worklog card / table ---- */
+  .worklog-card{ padding:0; overflow:hidden; }
+  .table-heading{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; flex-wrap:wrap;
+    padding:20px 22px;
+    border-bottom:1px solid var(--border-grey);
+  }
+  .table-heading h3{ font-size:18px; }
+  .table-heading p{
+    margin-top:4px; font-size:12.5px; color: var(--text-muted);
+  }
+  .live-indicator{
+    display:inline-flex; align-items:center; gap:7px;
+    font-size:11px; font-weight:700; letter-spacing:0.6px;
+    color:#1f7a4d;
+    background: rgba(31,122,77,0.08);
+    border:1px solid rgba(31,122,77,0.22);
+    padding:6px 12px; border-radius:20px;
+  }
+  .live-indicator i{
+    width:7px; height:7px; border-radius:50%;
+    background:#1f9d5e;
+    display:inline-block;
+    box-shadow: 0 0 0 0 rgba(31,157,94,0.6);
+    animation: dotPulse2 1.6s ease-out infinite;
+  }
+  @keyframes dotPulse2{
+    0%{ box-shadow: 0 0 0 0 rgba(31,157,94,0.55); }
+    70%{ box-shadow: 0 0 0 7px rgba(31,157,94,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(31,157,94,0); }
+  }
+
+  .table-wrap{ overflow-x:auto; }
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13.5px;
+  }
+  thead th{
+    text-align:left;
+    font-size:11px; font-weight:700; letter-spacing:0.5px;
+    text-transform:uppercase;
+    color: var(--text-muted);
+    background: var(--grey-bg);
+    padding:12px 22px;
+    border-bottom:1px solid var(--border-grey);
+    white-space:nowrap;
+  }
+  thead th.actions{ text-align:right; }
+  tbody td{
+    padding:14px 22px;
+    border-bottom:1px solid var(--border-grey);
+    color: var(--text-dark);
+    vertical-align:top;
+  }
+  tbody tr{ transition: background 0.25s var(--ease); }
+  tbody tr:hover{ background: rgba(122,17,37,0.03); }
+  tbody tr:last-child td{ border-bottom:none; }
+  td.actions{ text-align:right; white-space:nowrap; }
+
+  .status-pill{
+    display:inline-block;
+    font-size:11px; font-weight:700; letter-spacing:0.3px;
+    padding:4px 11px; border-radius:20px;
+  }
+  .status-active{ background: rgba(31,122,77,0.1); color:#1f7a4d; border:1px solid rgba(31,122,77,0.25); }
+  .status-completed{ background: rgba(18,43,82,0.08); color: var(--mr-navy); border:1px solid rgba(18,43,82,0.2); }
+  .status-upcoming{ background: rgba(199,154,61,0.14); color:#8a6a1f; border:1px solid rgba(199,154,61,0.35); }
+
+  td.actions a, td.actions button{
+    font-size:12px; font-weight:700;
+    color: var(--mr-navy);
+    background:none; border:none; cursor:pointer;
+    padding:5px 8px;
+    margin-left:4px;
+    border-radius:6px;
+    transition: all 0.2s var(--ease);
+  }
+  td.actions a:hover, td.actions button:hover{
+    background: rgba(18,43,82,0.08);
+  }
+  td.actions [data-delete], .danger{
+    color: var(--mr-maroon) !important;
+  }
+  td.actions [data-delete]:hover, .danger:hover{
+    background: rgba(122,17,37,0.08) !important;
+  }
+
+  /* ---- Modal ---- */
+  .modal{
+    position:fixed; inset:0; z-index:200;
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+  }
+  .modal-backdrop{
+    position:absolute; inset:0;
+    background: rgba(11,28,56,0.55);
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.25s var(--ease);
+  }
+  @keyframes fadeIn{ from{ opacity:0; } to{ opacity:1; } }
+  .modal-card{
+    position:relative;
+    background:#fff;
+    width:100%; max-width:460px;
+    border-radius:12px;
+    border-top:4px solid var(--mr-maroon);
+    box-shadow: 0 30px 60px rgba(11,28,56,0.35);
+    padding:26px 26px 24px;
+    animation: modalIn 0.3s var(--ease);
+  }
+  @keyframes modalIn{
+    from{ opacity:0; transform: translateY(18px) scale(0.98); }
+    to{ opacity:1; transform: translateY(0) scale(1); }
+  }
+  .modal-head{
+    display:flex; align-items:flex-start; justify-content:space-between;
+    gap:12px;
+  }
+  .modal-head h3{ font-size:20px; margin-top:4px; }
+  .close{
+    background:none; border:none;
+    font-size:22px; line-height:1;
+    color: var(--text-muted);
+    cursor:pointer;
+    padding:2px 6px;
+    border-radius:6px;
+    transition: all 0.2s var(--ease);
+  }
+  .close:hover{ background: var(--grey-bg); color: var(--mr-maroon); }
+
+  #worklogForm{ display:flex; flex-direction:column; gap:16px; }
+  #worklogForm label{
+    font-size:12.5px; font-weight:600;
+    color: var(--mr-navy-dark);
+    display:flex; flex-direction:column; gap:7px;
+  }
+  .form-actions{
+    display:flex; justify-content:flex-end; gap:10px;
+    margin-top:6px;
+  }
+
+  /* ---- Footer ---- */
+  footer{
+    background: linear-gradient(90deg, var(--mr-navy-dark), var(--mr-navy) 60%, var(--mr-maroon-dark));
+    color: rgba(255,255,255,0.85);
+    text-align:center;
+    font-size:12.5px;
+    padding:26px 20px 30px;
+    line-height:1.8;
+  }
+  footer b{ color:#fff; }
+
+  .title-cell{width:35ch;max-width:35ch;white-space:normal;overflow-wrap:break-word;word-break:normal;line-height:1.5;font-weight:600;color:var(--mr-navy-dark)}
+  .description-cell{width:40ch;max-width:40ch;white-space:normal;overflow-wrap:break-word;word-break:normal;line-height:1.55;color:var(--text-dark)}
 </style>
 </head>
 <body>
-<div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
-<header class="site-header"><div class="header-inner">
-  <a class="brand" href="index.html" aria-label="Manav Rachna University"><img class="brand-logo" src="mru-logo.png" alt="Manav Rachna University"></a>
-  <div class="header-right"><span class="admin-badge"><span class="dot"></span> ADMIN PORTAL</span><a class="view-site" href="index.html">View Site ↗</a><button id="logoutBtn" class="logout hidden" type="button">Log out</button></div>
-</div></header>
-<nav class="mainnav"><div class="nav-inner"><a href="index.html">Home</a><a href="index.html#about">About</a><a href="index.html#role">Role</a><a href="index.html#team">IQAC Team</a><a href="index.html#achievements">Achievements</a><a class="active" href="#">Worklog</a></div></nav>
-<section class="page-title-bar"><div class="breadcrumb"><b>IQAC</b> / Administration</div><h1>Worklog Administration</h1><p>Manage internal IQAC activities, titles, descriptions and status updates.</p></section>
+<div class="ambient ambient-one"></div>
+<div class="ambient ambient-two"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="index.html" aria-label="Manav Rachna University IQAC">
+      <img class="brand-logo" src="mru-logo.png" alt="Manav Rachna University">
+    </a>
+    <div class="header-right">
+      <span class="admin-badge"><span class="dot"></span> ADMIN PORTAL</span>
+      <a href="index.html" class="view-site">View Website <span>↗</span></a>
+      <button id="logoutBtn" class="logout hidden">Logout</button>
+    </div>
+  </div>
+</header>
+
+
+
+<div class="page-title-bar">
+  <div class="breadcrumb">Home &nbsp;/&nbsp; IQAC &nbsp;/&nbsp; <b>Administration</b></div>
+  <h1>IQAC Administration</h1>
+  <p>Manage the public-facing IQAC Worklog from one place.</p>
+</div>
+
 <main class="content-wrap">
   <section id="loginView" class="login-layout">
-    <div class="login-intro"><span class="eyebrow">Restricted Access</span><h2>IQAC <em>Admin</em> Portal</h2><p>Sign in to manage the Internal Quality Assurance Cell Worklog and keep the public-facing activity record up to date.</p><div class="intro-rule"></div><div class="secure-note"><span>✓</span> Secure Supabase authentication</div></div>
-    <div class="login-card card"><span class="card-kicker">ADMIN LOGIN</span><h2>Welcome back</h2><div class="gold-line"></div><form id="loginForm"><label>Email<input id="email" type="email" autocomplete="username" placeholder="admin@example.com" required></label><label>Password<input id="password" type="password" autocomplete="current-password" placeholder="Enter your password" required></label><div id="loginMessage" class="message"></div><button class="primary full" type="submit">Sign in <span>→</span></button></form><div class="login-footer">Authorised IQAC personnel only.</div></div>
+    <div class="login-intro">
+      <span class="eyebrow">INTERNAL QUALITY ASSURANCE CELL</span>
+      <h2>Keep the IQAC<br><em>Worklog current.</em></h2>
+      <p>Update activities, milestones and ongoing work without editing the website code.</p>
+      <div class="intro-rule"></div>
+      <div class="secure-note"><span>✓</span> Restricted administrative access</div>
+    </div>
+    <div class="login-card card">
+      <div class="card-kicker">ADMINISTRATION</div>
+      <h2>Sign in</h2>
+      <p class="card-sub">Use your authorised IQAC account to continue.</p>
+      <form id="loginForm">
+        <label>Email address
+          <input id="email" type="email" autocomplete="username" placeholder="admin@example.com" required>
+        </label>
+        <label>Password
+          <input id="password" type="password" autocomplete="current-password" placeholder="Enter your password" required>
+        </label>
+        <button class="primary full" type="submit">Sign in <span>→</span></button>
+        <div id="loginMessage" class="message"></div>
+      </form>
+      <div class="login-footer">Manav Rachna University · IQAC</div>
+    </div>
   </section>
+
   <section id="adminView" class="hidden">
-    <div class="dashboard-head"><div><span class="card-kicker">WORKLOG</span><h2>Activity Management</h2><p>Create, update or remove IQAC Worklog entries.</p></div><button id="addBtn" class="primary add-btn" type="button"><span>＋</span> Add Worklog</button></div>
-    <div class="stat-card card"><div><div class="stat-label">TOTAL WORKLOG ENTRIES</div><div class="stat-value" id="totalStat">0</div></div><div class="live-badge">LIVE</div></div>
-    <div class="table-card card"><div class="table-head"><div><span class="card-kicker">WORKLOG RECORDS</span><h3>All Activities</h3></div><span class="live-badge">SUPABASE</span></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Title</th><th>Description</th><th>Status</th><th class="actions">Actions</th></tr></thead><tbody id="adminBody"></tbody></table></div></div>
+    <div class="dashboard-head">
+      <div>
+        <div class="eyebrow">WORKLOG MANAGEMENT</div>
+        <h2>IQAC Worklog</h2>
+        <p>Track and publish IQAC activities, one update at a time.</p>
+      </div>
+      <button id="addBtn" class="primary add-btn"><span>+</span> Add Worklog</button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat card"><span class="stat-label">PUBLIC UPDATES</span><strong id="totalStat">—</strong><span>Worklog entries</span></div>
+      <div class="stat card"><span class="stat-label">STATUS</span><strong>Live</strong><span>Changes publish to website</span></div>
+      <div class="stat card"><span class="stat-label">ACCESS</span><strong>Admin</strong><span>Authorised account</span></div>
+    </div>
+
+    <div id="message" class="message"></div>
+    <div class="worklog-card card">
+      <div class="table-heading">
+        <div><h3>Activity records</h3><p>Newest entries appear first.</p></div>
+        <span class="live-indicator"><i></i> LIVE</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Title</th><th>Description</th><th>Status</th><th class="actions">Actions</th></tr></thead>
+          <tbody id="adminBody"></tbody>
+        </table>
+      </div>
+    </div>
   </section>
 </main>
-<footer><div>Internal Quality Assurance Cell — <b>Manav Rachna University</b></div><div>Faridabad, Haryana · NAAC A Accredited</div></footer>
-<div id="modal" class="modal hidden"><div class="modal-backdrop"></div><div class="modal-card"><div class="modal-head"><div><span class="card-kicker">WORKLOG</span><h3 id="modalTitle">Add Worklog</h3></div><button id="closeModal" class="close" aria-label="Close">×</button></div><div class="gold-line"></div><form id="worklogForm"><input type="hidden" id="recordId"><label>Date<input id="workDate" type="date" required></label><label>Title<input id="workTitle" type="text" maxlength="200" placeholder="Enter the Worklog title…" required></label><label>Description<textarea id="workDescription" maxlength="1000" rows="5" placeholder="Describe what this activity is about…" required></textarea></label><label>Status<select id="workStatus" required><option>Active</option><option>Completed</option><option>Upcoming</option></select></label><div class="form-actions"><button type="button" id="cancelBtn" class="secondary">Cancel</button><button type="submit" class="primary">Save Worklog <span>→</span></button></div></form></div></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="config.js?v=5"></script><script>
+
+<footer>
+  <div>Internal Quality Assurance Cell — <b>Manav Rachna University</b></div>
+  <div>Faridabad, Haryana · NAAC A Accredited</div>
+</footer>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-backdrop"></div>
+  <div class="modal-card">
+    <div class="modal-head">
+      <div><span class="card-kicker">WORKLOG</span><h3 id="modalTitle">Add Worklog</h3></div>
+      <button id="closeModal" class="close" aria-label="Close">×</button>
+    </div>
+    <div class="gold-line"></div>
+    <form id="worklogForm">
+      <input type="hidden" id="recordId">
+      <label>Date<input id="workDate" type="date" required></label>
+      <label>Title<input id="workTitle" type="text" maxlength="200" placeholder="Enter the Worklog title…" required></label>
+      <label>Description<textarea id="workDescription" maxlength="1000" rows="5" placeholder="Describe what this activity is about…" required></textarea></label>
+      <label>Status<select id="workStatus" required><option>Active</option><option>Completed</option><option>Upcoming</option></select></label>
+      <div class="form-actions"><button type="button" id="cancelBtn" class="secondary">Cancel</button><button type="submit" class="primary">Save Worklog <span>→</span></button></div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js?v=5"></script>
+<script>
 const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{storage:window.sessionStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
 const $=id=>document.getElementById(id);let records=[];
 function setMessage(text,type=''){const el=$('message');if(el){el.textContent=text;el.className='message '+type}}
@@ -51,14 +725,16 @@ function statusClass(status){const s=String(status||'').toLowerCase();if(s==='co
 function formatDate(date){return date?new Date(date+'T00:00:00').toLocaleDateString('en-GB'):''}
 function showLogin(){$('loginView').classList.remove('hidden');$('adminView').classList.add('hidden');$('logoutBtn').classList.add('hidden')}
 async function showAdmin(){$('loginView').classList.add('hidden');$('adminView').classList.remove('hidden');$('logoutBtn').classList.remove('hidden');await loadRecords()}
-async function init(){try{const{data,error}=await supabaseClient.auth.getSession();if(error){console.error('Session error:',error);showLogin();return}if(data?.session)await showAdmin();else showLogin()}catch(error){console.error('Initialisation error:',error);showLogin()}}
-async function loadRecords(){setMessage('Loading…');const{data,error}=await supabaseClient.from('worklog').select('id,date,title,description,status').order('date',{ascending:false});if(error){console.error('Worklog load error:',error);setMessage('Could not load Worklog: '+error.message,'error');updateTotalStat(0);return}records=data||[];render();setMessage('')}
+async function init(){try{const{data,error}=await supabaseClient.auth.getSession();if(error){console.error(error);showLogin();return}if(data?.session)await showAdmin();else showLogin()}catch(error){console.error(error);showLogin()}}
+async function loadRecords(){setMessage('Loading…');const{data,error}=await supabaseClient.from('worklog').select('id,date,title,description,status').order('date',{ascending:false});if(error){console.error(error);setMessage('Could not load Worklog: '+error.message,'error');updateTotalStat(0);return}records=data||[];render();setMessage('')}
 function updateTotalStat(count){const stat=$('totalStat');if(stat)stat.textContent=String(count)}
-function render(){const body=$('adminBody');if(!records.length){body.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:30px">No Worklog entries yet.</td></tr>';updateTotalStat(0);return}body.innerHTML=records.map(r=>`<tr><td>${esc(formatDate(r.date))}</td><td class="title-cell">${esc(r.title)}</td><td class="task-cell">${esc(r.description)}</td><td><span class="status-pill ${esc(statusClass(r.status))}">${esc(r.status)}</span></td><td class="actions"><button type="button" data-edit="${esc(r.id)}">Edit</button><button type="button" data-delete="${esc(r.id)}">Delete</button></td></tr>`).join('');updateTotalStat(records.length);body.querySelectorAll('[data-edit]').forEach(button=>button.addEventListener('click',()=>openModal(Number(button.dataset.edit))));body.querySelectorAll('[data-delete]').forEach(button=>button.addEventListener('click',()=>deleteRecord(Number(button.dataset.delete))))}
-function openModal(id=null){$('recordId').value=id||'';$('modalTitle').textContent=id?'Edit Worklog':'Add Worklog';if(id){const record=records.find(item=>item.id===id);if(!record){alert('Worklog entry could not be found.');return}$('workDate').value=record.date||'';$('workTitle').value=record.title||'';$('workDescription').value=record.description||'';$('workStatus').value=record.status||'Active'}else{$('worklogForm').reset();$('workStatus').value='Active'}$('modal').classList.remove('hidden');$('workDate').focus()}
+function render(){const body=$('adminBody');if(!records.length){body.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:30px">No Worklog entries yet.</td></tr>';updateTotalStat(0);return}body.innerHTML=records.map(r=>`<tr><td>${esc(formatDate(r.date))}</td><td class="title-cell">${esc(r.title)}</td><td class="description-cell">${esc(r.description)}</td><td><span class="status-pill ${esc(statusClass(r.status))}">${esc(r.status)}</span></td><td class="actions"><button type="button" data-edit="${esc(r.id)}">Edit</button><button type="button" data-delete="${esc(r.id)}">Delete</button></td></tr>`).join('');updateTotalStat(records.length);body.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>openModal(Number(b.dataset.edit))));body.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>deleteRecord(Number(b.dataset.delete))))}
+function openModal(id=null){$('recordId').value=id||'';$('modalTitle').textContent=id?'Edit Worklog':'Add Worklog';if(id){const r=records.find(x=>x.id===id);if(!r)return alert('Worklog entry could not be found.');$('workDate').value=r.date||'';$('workTitle').value=r.title||'';$('workDescription').value=r.description||'';$('workStatus').value=r.status||'Active'}else{$('worklogForm').reset();$('workStatus').value='Active'}$('modal').classList.remove('hidden');$('workDate').focus()}
 function closeModal(){$('modal').classList.add('hidden')}
-async function saveRecord(event){event.preventDefault();const id=$('recordId').value.trim();const payload={date:$('workDate').value,title:$('workTitle').value.trim(),description:$('workDescription').value.trim(),status:$('workStatus').value};if(!payload.date||!payload.title||!payload.description||!payload.status){alert('Please complete all fields.');return}const submitButton=$('worklogForm').querySelector('button[type="submit"]');const originalText=submitButton.innerHTML;submitButton.disabled=true;submitButton.innerHTML='Saving…';let result;if(id)result=await supabaseClient.from('worklog').update(payload).eq('id',Number(id));else result=await supabaseClient.from('worklog').insert(payload);submitButton.disabled=false;submitButton.innerHTML=originalText;if(result.error){console.error('Save error:',result.error);alert('Could not save Worklog: '+result.error.message);return}closeModal();await loadRecords()}
-async function deleteRecord(id){const record=records.find(item=>item.id===id);if(!record)return;if(!confirm('Delete this Worklog entry?\n\n'+(record.title||record.description||'')))return;const{error}=await supabaseClient.from('worklog').delete().eq('id',id);if(error){console.error('Delete error:',error);alert('Could not delete Worklog: '+error.message);return}await loadRecords()}
-$('loginForm').addEventListener('submit',async event=>{event.preventDefault();const email=$('email').value.trim();const password=$('password').value;if(!email||!password)return;setLoginMessage('Signing in…');const{error}=await supabaseClient.auth.signInWithPassword({email,password});if(error){console.error('Login error:',error);setLoginMessage(error.message,'error');return}setLoginMessage('');await showAdmin()});
-$('logoutBtn').addEventListener('click',async()=>{const{error}=await supabaseClient.auth.signOut();if(error){console.error('Logout error:',error);alert('Could not log out: '+error.message);return}showLogin()});$('addBtn').addEventListener('click',()=>openModal());$('closeModal').addEventListener('click',closeModal);$('cancelBtn').addEventListener('click',closeModal);$('modal').addEventListener('click',event=>{if(event.target===$('modal')||event.target.classList.contains('modal-backdrop'))closeModal()});$('worklogForm').addEventListener('submit',saveRecord);document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!$('modal').classList.contains('hidden'))closeModal()});supabaseClient.auth.onAuthStateChange((_event,session)=>{if(session)showAdmin();else showLogin()});init();
-</script></body></html>
+async function saveRecord(e){e.preventDefault();const id=$('recordId').value.trim();const payload={date:$('workDate').value,title:$('workTitle').value.trim(),description:$('workDescription').value.trim(),status:$('workStatus').value};if(!payload.date||!payload.title||!payload.description||!payload.status)return alert('Please complete all fields.');const btn=$('worklogForm').querySelector('button[type="submit"]');const original=btn.innerHTML;btn.disabled=true;btn.innerHTML='Saving…';const result=id?await supabaseClient.from('worklog').update(payload).eq('id',Number(id)):await supabaseClient.from('worklog').insert(payload);btn.disabled=false;btn.innerHTML=original;if(result.error)return alert('Could not save Worklog: '+result.error.message);closeModal();await loadRecords()}
+async function deleteRecord(id){const r=records.find(x=>x.id===id);if(!r)return;if(!confirm('Delete this Worklog entry?\n\n'+(r.title||r.description||'')))return;const{error}=await supabaseClient.from('worklog').delete().eq('id',id);if(error)return alert('Could not delete Worklog: '+error.message);await loadRecords()}
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('email').value.trim(),password=$('password').value;if(!email||!password)return;setLoginMessage('Signing in…');const{error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)return setLoginMessage(error.message,'error');setLoginMessage('');await showAdmin()});
+$('logoutBtn').addEventListener('click',async()=>{const{error}=await supabaseClient.auth.signOut();if(error)return alert('Could not log out: '+error.message);showLogin()});$('addBtn').addEventListener('click',()=>openModal());$('closeModal').addEventListener('click',closeModal);$('cancelBtn').addEventListener('click',closeModal);$('modal').addEventListener('click',e=>{if(e.target===$('modal')||e.target.classList.contains('modal-backdrop'))closeModal()});$('worklogForm').addEventListener('submit',saveRecord);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modal').classList.contains('hidden'))closeModal()});supabaseClient.auth.onAuthStateChange((_event,session)=>{if(session)showAdmin();else showLogin()});init();
+</script>
+</body>
+</html>

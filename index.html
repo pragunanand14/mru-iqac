@@ -673,7 +673,8 @@
   .worklog-table th{background:var(--mr-navy);color:#fff;text-align:left;padding:14px 18px;font-weight:600;}
   .worklog-table td{padding:15px 18px;border-bottom:1px solid var(--border-grey);color:var(--text-dark);}
   .worklog-table tbody tr:last-child td{border-bottom:0;} .worklog-table tbody tr:hover{background:#fafbfc;}
-  .worklog-task-cell{
+  .worklog-title-cell{width:24ch;max-width:24ch;white-space:normal !important;overflow-wrap:break-word;word-break:normal;line-height:1.5;font-weight:600;}
+.worklog-task-cell{
     width:50ch;
     max-width:50ch;
     white-space:normal !important;
@@ -989,9 +990,9 @@
       <p style="font-size:13px; color:var(--text-muted); max-width:820px; margin:-6px 0 18px;">A simple record of IQAC activities and their current status.</p>
       <div class="card worklog-card reveal">
         <div class="worklog-table-wrap"><table class="worklog-table">
-          <thead><tr><th>Date</th><th>Task</th><th>Status</th></tr></thead>
+          <thead><tr><th>Date</th><th>Title</th><th>Description</th><th>Status</th></tr></thead>
           <tbody id="worklogBody">
-            <tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:28px;">Loading worklog…</td></tr>
+            <tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:28px;">Loading worklog…</td></tr>
           </tbody>
         </table></div>
       </div>
@@ -1091,24 +1092,24 @@
     if(!body) return;
     const { data, error } = await supabaseClient
       .from('worklog')
-      .select('id, date, task, status')
+      .select('id, date, title, description, status')
       .order('date', { ascending: false });
 
     if(error){
       console.error('Worklog load error:', error);
-      body.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:28px;">Unable to load worklog.</td></tr>';
+      body.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:28px;">Unable to load worklog.</td></tr>';
       return;
     }
 
     if(!data || data.length === 0){
-      body.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--text-muted);padding:28px;">No worklog entries yet.</td></tr>';
+      body.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:28px;">No worklog entries yet.</td></tr>';
       return;
     }
 
     body.innerHTML = data.map(function(row){
       const statusClass = row.status === 'Active' ? 'status-active' : row.status === 'Completed' ? 'status-completed' : 'status-upcoming';
       const date = row.date ? new Date(row.date + 'T00:00:00').toLocaleDateString('en-GB') : '';
-      return '<tr><td>' + escapeHtml(date) + '</td><td class="worklog-task-cell">' + escapeHtml(row.task) + '</td><td><span class="status-pill ' + statusClass + '">' + escapeHtml(row.status) + '</span></td></tr>';
+      return '<tr><td>' + escapeHtml(date) + '</td><td class="worklog-title-cell">' + escapeHtml(row.title) + '</td><td class="worklog-task-cell">' + escapeHtml(row.description) + '</td><td><span class="status-pill ' + statusClass + '">' + escapeHtml(row.status) + '</span></td></tr>';
     }).join('');
   }
 
