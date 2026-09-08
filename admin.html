@@ -92,33 +92,16 @@
     gap:16px;
   }
   .brand{
-    display:flex; align-items:center; gap:14px;
+    display:flex; align-items:center;
   }
-  .brand-mark{
-    flex:0 0 auto;
-    width:50px; height:50px;
-    border-radius:12px;
-    background: linear-gradient(135deg, var(--mr-maroon), var(--mr-maroon-dark));
-    color:#fff;
-    font-family:'Playfair Display', serif;
-    font-weight:700;
-    font-size:15px;
-    display:flex; align-items:center; justify-content:center;
-    letter-spacing:0.5px;
-    box-shadow: 0 6px 16px rgba(122,17,37,0.28);
-    transition: transform 0.35s var(--ease);
+  .brand-logo{
+    display:block;
+    width:285px;
+    height:auto;
+    max-height:64px;
+    object-fit:contain;
   }
-  .brand:hover .brand-mark{ transform: scale(1.05) rotate(-2deg); }
-  .brand-university{
-    font-size:16px; font-weight:800; letter-spacing:0.3px;
-    color: var(--mr-navy-dark);
-    line-height:1.25;
-  }
-  .brand-unit{
-    font-size:11.5px; color: var(--text-muted);
-    letter-spacing:0.4px; text-transform:uppercase;
-    margin-top:2px;
-  }
+  .brand:hover .brand-logo{ transform:scale(1.01); }
   .header-right{
     display:flex; align-items:center; gap:14px;
   }
@@ -422,6 +405,7 @@
   }
   @media (max-width:760px){
     .stats-row{ grid-template-columns:1fr; }
+    .brand-logo{ width:220px; max-height:52px; }
   }
   .stat{
     padding:20px 20px 18px;
@@ -507,6 +491,23 @@
   tbody tr:hover{ background: rgba(122,17,37,0.03); }
   tbody tr:last-child td{ border-bottom:none; }
   td.actions{ text-align:right; white-space:nowrap; }
+
+  /* Keep long Worklog tasks readable while keeping Status + Actions visible. */
+  td.task-cell{
+    width:50ch;
+    max-width:50ch;
+    white-space:normal;
+    overflow-wrap:break-word;
+    word-break:normal;
+    line-height:1.55;
+  }
+
+  @media (max-width:760px){
+    td.task-cell{
+      width:auto;
+      max-width:50ch;
+    }
+  }
 
   .status-pill{
     display:inline-block;
@@ -608,12 +609,8 @@
 
 <header class="site-header">
   <div class="header-inner">
-    <div class="brand" aria-label="Manav Rachna University IQAC">
-      <div class="brand-mark">MRU</div>
-      <div>
-        <div class="brand-university">MANAV RACHNA UNIVERSITY</div>
-        <div class="brand-unit">Internal Quality Assurance Cell</div>
-      </div>
+    <div class="brand" aria-label="Manav Rachna University">
+      <img class="brand-logo" src="mru-logo.png" alt="Manav Rachna University">
     </div>
     <div class="header-right">
       <span class="admin-badge"><span class="dot"></span> ADMIN PORTAL</span>
@@ -824,7 +821,7 @@
     body.innerHTML = records.map(r => `
       <tr>
         <td>${esc(formatDate(r.date))}</td>
-        <td>${esc(r.task)}</td>
+        <td class="task-cell">${esc(r.task)}</td>
         <td><span class="status-pill ${esc(statusClass(r.status))}">${esc(r.status)}</span></td>
         <td class="actions">
           <button type="button" data-edit="${esc(r.id)}">Edit</button>
