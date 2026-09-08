@@ -673,6 +673,14 @@
   .worklog-table th{background:var(--mr-navy);color:#fff;text-align:left;padding:14px 18px;font-weight:600;}
   .worklog-table td{padding:15px 18px;border-bottom:1px solid var(--border-grey);color:var(--text-dark);}
   .worklog-table tbody tr:last-child td{border-bottom:0;} .worklog-table tbody tr:hover{background:#fafbfc;}
+  .worklog-task-cell{
+    width:50ch;
+    max-width:50ch;
+    white-space:normal !important;
+    overflow-wrap:break-word;
+    word-break:normal;
+    line-height:1.55;
+  }
   .status-pill{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;}
   .status-pill::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor;}
   .status-active{color:#197a45;background:#e9f7ef;} .status-completed{color:#245f9e;background:#eaf2fb;} .status-upcoming{color:#8a6416;background:#fff6df;}
@@ -1100,7 +1108,7 @@
     body.innerHTML = data.map(function(row){
       const statusClass = row.status === 'Active' ? 'status-active' : row.status === 'Completed' ? 'status-completed' : 'status-upcoming';
       const date = row.date ? new Date(row.date + 'T00:00:00').toLocaleDateString('en-GB') : '';
-      return '<tr><td>' + escapeHtml(date) + '</td><td>' + escapeHtml(row.task) + '</td><td><span class="status-pill ' + statusClass + '">' + escapeHtml(row.status) + '</span></td></tr>';
+      return '<tr><td>' + escapeHtml(date) + '</td><td class="worklog-task-cell">' + escapeHtml(row.task) + '</td><td><span class="status-pill ' + statusClass + '">' + escapeHtml(row.status) + '</span></td></tr>';
     }).join('');
   }
 
