@@ -92,33 +92,16 @@
     gap:16px;
   }
   .brand{
-    display:flex; align-items:center; gap:14px;
+    display:flex; align-items:center;
   }
-  .brand-mark{
-    flex:0 0 auto;
-    width:50px; height:50px;
-    border-radius:12px;
-    background: linear-gradient(135deg, var(--mr-maroon), var(--mr-maroon-dark));
-    color:#fff;
-    font-family:'Playfair Display', serif;
-    font-weight:700;
-    font-size:15px;
-    display:flex; align-items:center; justify-content:center;
-    letter-spacing:0.5px;
-    box-shadow: 0 6px 16px rgba(122,17,37,0.28);
-    transition: transform 0.35s var(--ease);
+  .brand-logo{
+    display:block;
+    width:285px;
+    height:auto;
+    max-height:64px;
+    object-fit:contain;
   }
-  .brand:hover .brand-mark{ transform: scale(1.05) rotate(-2deg); }
-  .brand-university{
-    font-size:16px; font-weight:800; letter-spacing:0.3px;
-    color: var(--mr-navy-dark);
-    line-height:1.25;
-  }
-  .brand-unit{
-    font-size:11.5px; color: var(--text-muted);
-    letter-spacing:0.4px; text-transform:uppercase;
-    margin-top:2px;
-  }
+  .brand:hover .brand-logo{ transform:scale(1.01); }
   .header-right{
     display:flex; align-items:center; gap:14px;
   }
@@ -422,6 +405,7 @@
   }
   @media (max-width:760px){
     .stats-row{ grid-template-columns:1fr; }
+    .brand-logo{ width:220px; max-height:52px; }
   }
   .stat{
     padding:20px 20px 18px;
@@ -507,6 +491,23 @@
   tbody tr:hover{ background: rgba(122,17,37,0.03); }
   tbody tr:last-child td{ border-bottom:none; }
   td.actions{ text-align:right; white-space:nowrap; }
+
+  /* Keep long Worklog tasks readable while keeping Status + Actions visible. */
+  td.task-cell{
+    width:50ch;
+    max-width:50ch;
+    white-space:normal;
+    overflow-wrap:break-word;
+    word-break:normal;
+    line-height:1.55;
+  }
+
+  @media (max-width:760px){
+    td.task-cell{
+      width:auto;
+      max-width:50ch;
+    }
+  }
 
   .status-pill{
     display:inline-block;
@@ -600,9 +601,6 @@
     line-height:1.8;
   }
   footer b{ color:#fff; }
-
-  .title-cell{width:35ch;max-width:35ch;white-space:normal;overflow-wrap:break-word;word-break:normal;line-height:1.5;font-weight:600;color:var(--mr-navy-dark)}
-  .description-cell{width:40ch;max-width:40ch;white-space:normal;overflow-wrap:break-word;word-break:normal;line-height:1.55;color:var(--text-dark)}
 </style>
 </head>
 <body>
@@ -611,24 +609,15 @@
 
 <header class="site-header">
   <div class="header-inner">
-    <a class="brand" href="index.html" aria-label="Manav Rachna University IQAC">
+    <div class="brand" aria-label="Manav Rachna University">
       <img class="brand-logo" src="mru-logo.png" alt="Manav Rachna University">
-    </a>
+    </div>
     <div class="header-right">
       <span class="admin-badge"><span class="dot"></span> ADMIN PORTAL</span>
-      <a href="index.html" class="view-site">View Website <span>↗</span></a>
       <button id="logoutBtn" class="logout hidden">Logout</button>
     </div>
   </div>
 </header>
-
-
-
-<div class="page-title-bar">
-  <div class="breadcrumb">Home &nbsp;/&nbsp; IQAC &nbsp;/&nbsp; <b>Administration</b></div>
-  <h1>IQAC Administration</h1>
-  <p>Manage the public-facing IQAC Worklog from one place.</p>
-</div>
 
 <main class="content-wrap">
   <section id="loginView" class="login-layout">
@@ -681,7 +670,7 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Date</th><th>Title</th><th>Description</th><th>Status</th><th class="actions">Actions</th></tr></thead>
+          <thead><tr><th>Date</th><th>Activity / Task</th><th>Status</th><th class="actions">Actions</th></tr></thead>
           <tbody id="adminBody"></tbody>
         </table>
       </div>
@@ -705,8 +694,7 @@
     <form id="worklogForm">
       <input type="hidden" id="recordId">
       <label>Date<input id="workDate" type="date" required></label>
-      <label>Title<input id="workTitle" type="text" maxlength="200" placeholder="Enter the Worklog title…" required></label>
-      <label>Description<textarea id="workDescription" maxlength="1000" rows="5" placeholder="Describe what this activity is about…" required></textarea></label>
+      <label>Task<input id="workTask" type="text" maxlength="300" placeholder="Describe the IQAC activity…" required></label>
       <label>Status<select id="workStatus" required><option>Active</option><option>Completed</option><option>Upcoming</option></select></label>
       <div class="form-actions"><button type="button" id="cancelBtn" class="secondary">Cancel</button><button type="submit" class="primary">Save Worklog <span>→</span></button></div>
     </form>
@@ -716,25 +704,314 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js?v=5"></script>
 <script>
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{storage:window.sessionStorage,persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
-const $=id=>document.getElementById(id);let records=[];
-function setMessage(text,type=''){const el=$('message');if(el){el.textContent=text;el.className='message '+type}}
-function setLoginMessage(text,type=''){const el=$('loginMessage');if(el){el.textContent=text;el.className='message '+type}}
-function esc(value){return String(value??'').replace(/[&<>'"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]))}
-function statusClass(status){const s=String(status||'').toLowerCase();if(s==='completed')return'status-completed';if(s==='upcoming')return'status-upcoming';return'status-active'}
-function formatDate(date){return date?new Date(date+'T00:00:00').toLocaleDateString('en-GB'):''}
-function showLogin(){$('loginView').classList.remove('hidden');$('adminView').classList.add('hidden');$('logoutBtn').classList.add('hidden')}
-async function showAdmin(){$('loginView').classList.add('hidden');$('adminView').classList.remove('hidden');$('logoutBtn').classList.remove('hidden');await loadRecords()}
-async function init(){try{const{data,error}=await supabaseClient.auth.getSession();if(error){console.error(error);showLogin();return}if(data?.session)await showAdmin();else showLogin()}catch(error){console.error(error);showLogin()}}
-async function loadRecords(){setMessage('Loading…');const{data,error}=await supabaseClient.from('worklog').select('id,date,title,description,status').order('date',{ascending:false});if(error){console.error(error);setMessage('Could not load Worklog: '+error.message,'error');updateTotalStat(0);return}records=data||[];render();setMessage('')}
-function updateTotalStat(count){const stat=$('totalStat');if(stat)stat.textContent=String(count)}
-function render(){const body=$('adminBody');if(!records.length){body.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:30px">No Worklog entries yet.</td></tr>';updateTotalStat(0);return}body.innerHTML=records.map(r=>`<tr><td>${esc(formatDate(r.date))}</td><td class="title-cell">${esc(r.title)}</td><td class="description-cell">${esc(r.description)}</td><td><span class="status-pill ${esc(statusClass(r.status))}">${esc(r.status)}</span></td><td class="actions"><button type="button" data-edit="${esc(r.id)}">Edit</button><button type="button" data-delete="${esc(r.id)}">Delete</button></td></tr>`).join('');updateTotalStat(records.length);body.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>openModal(Number(b.dataset.edit))));body.querySelectorAll('[data-delete]').forEach(b=>b.addEventListener('click',()=>deleteRecord(Number(b.dataset.delete))))}
-function openModal(id=null){$('recordId').value=id||'';$('modalTitle').textContent=id?'Edit Worklog':'Add Worklog';if(id){const r=records.find(x=>x.id===id);if(!r)return alert('Worklog entry could not be found.');$('workDate').value=r.date||'';$('workTitle').value=r.title||'';$('workDescription').value=r.description||'';$('workStatus').value=r.status||'Active'}else{$('worklogForm').reset();$('workStatus').value='Active'}$('modal').classList.remove('hidden');$('workDate').focus()}
-function closeModal(){$('modal').classList.add('hidden')}
-async function saveRecord(e){e.preventDefault();const id=$('recordId').value.trim();const payload={date:$('workDate').value,title:$('workTitle').value.trim(),description:$('workDescription').value.trim(),status:$('workStatus').value};if(!payload.date||!payload.title||!payload.description||!payload.status)return alert('Please complete all fields.');const btn=$('worklogForm').querySelector('button[type="submit"]');const original=btn.innerHTML;btn.disabled=true;btn.innerHTML='Saving…';const result=id?await supabaseClient.from('worklog').update(payload).eq('id',Number(id)):await supabaseClient.from('worklog').insert(payload);btn.disabled=false;btn.innerHTML=original;if(result.error)return alert('Could not save Worklog: '+result.error.message);closeModal();await loadRecords()}
-async function deleteRecord(id){const r=records.find(x=>x.id===id);if(!r)return;if(!confirm('Delete this Worklog entry?\n\n'+(r.title||r.description||'')))return;const{error}=await supabaseClient.from('worklog').delete().eq('id',id);if(error)return alert('Could not delete Worklog: '+error.message);await loadRecords()}
-$('loginForm').addEventListener('submit',async e=>{e.preventDefault();const email=$('email').value.trim(),password=$('password').value;if(!email||!password)return;setLoginMessage('Signing in…');const{error}=await supabaseClient.auth.signInWithPassword({email,password});if(error)return setLoginMessage(error.message,'error');setLoginMessage('');await showAdmin()});
-$('logoutBtn').addEventListener('click',async()=>{const{error}=await supabaseClient.auth.signOut();if(error)return alert('Could not log out: '+error.message);showLogin()});$('addBtn').addEventListener('click',()=>openModal());$('closeModal').addEventListener('click',closeModal);$('cancelBtn').addEventListener('click',closeModal);$('modal').addEventListener('click',e=>{if(e.target===$('modal')||e.target.classList.contains('modal-backdrop'))closeModal()});$('worklogForm').addEventListener('submit',saveRecord);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('modal').classList.contains('hidden'))closeModal()});supabaseClient.auth.onAuthStateChange((_event,session)=>{if(session)showAdmin();else showLogin()});init();
+  // ============================================================
+  // IQAC ADMIN — application JavaScript is embedded in admin.html.
+  // Only Supabase configuration remains in config.js.
+  // ============================================================
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+      // Admin sessions are intentionally NOT persisted.
+      // Refreshing or closing the tab/browser requires a new login.
+      auth: {
+        persistSession: false,
+        autoRefreshToken: true,
+        detectSessionInUrl: false
+      }
+    }
+  );
+
+  const $ = (id) => document.getElementById(id);
+  let records = [];
+
+  function setMessage(text, type = '') {
+    const el = $('message');
+    if (!el) return;
+    el.textContent = text;
+    el.className = 'message ' + type;
+  }
+
+  function setLoginMessage(text, type = '') {
+    const el = $('loginMessage');
+    if (!el) return;
+    el.textContent = text;
+    el.className = 'message ' + type;
+  }
+
+  function esc(value) {
+    return String(value ?? '').replace(/[&<>'"]/g, ch => ({
+      '&':'&amp;', '<':'&lt;', '>':'&gt;',
+      "'":'&#39;', '"':'&quot;'
+    }[ch]));
+  }
+
+  function statusClass(status) {
+    const s = String(status || '').toLowerCase();
+    if (s === 'completed') return 'status-completed';
+    if (s === 'upcoming') return 'status-upcoming';
+    return 'status-active';
+  }
+
+  function formatDate(date) {
+    return date ? new Date(date + 'T00:00:00').toLocaleDateString('en-GB') : '';
+  }
+
+  function showLogin() {
+    $('loginView').classList.remove('hidden');
+    $('adminView').classList.add('hidden');
+    $('logoutBtn').classList.add('hidden');
+  }
+
+  async function showAdmin() {
+    $('loginView').classList.add('hidden');
+    $('adminView').classList.remove('hidden');
+    $('logoutBtn').classList.remove('hidden');
+    await loadRecords();
+  }
+
+  async function init() {
+    try {
+      const { data, error } = await supabaseClient.auth.getSession();
+
+      if (error) {
+        console.error('Session error:', error);
+        showLogin();
+        return;
+      }
+
+      if (data?.session) {
+        await showAdmin();
+      } else {
+        showLogin();
+      }
+    } catch (error) {
+      console.error('Initialisation error:', error);
+      showLogin();
+    }
+  }
+
+  async function loadRecords() {
+    setMessage('Loading…');
+
+    const { data, error } = await supabaseClient
+      .from('worklog')
+      .select('id,date,task,status')
+      .order('date', { ascending: false });
+
+    if (error) {
+      console.error('Worklog load error:', error);
+      setMessage('Could not load Worklog: ' + error.message, 'error');
+      updateTotalStat(0);
+      return;
+    }
+
+    records = data || [];
+    render();
+    setMessage('');
+  }
+
+  function updateTotalStat(count) {
+    const stat = $('totalStat');
+    if (stat) stat.textContent = String(count);
+  }
+
+  function render() {
+    const body = $('adminBody');
+
+    if (!records.length) {
+      body.innerHTML =
+        '<tr><td colspan="4" style="text-align:center;color:var(--text-muted);padding:30px">No Worklog entries yet.</td></tr>';
+      updateTotalStat(0);
+      return;
+    }
+
+    body.innerHTML = records.map(r => `
+      <tr>
+        <td>${esc(formatDate(r.date))}</td>
+        <td class="task-cell">${esc(r.task)}</td>
+        <td><span class="status-pill ${esc(statusClass(r.status))}">${esc(r.status)}</span></td>
+        <td class="actions">
+          <button type="button" data-edit="${esc(r.id)}">Edit</button>
+          <button type="button" data-delete="${esc(r.id)}">Delete</button>
+        </td>
+      </tr>
+    `).join('');
+
+    updateTotalStat(records.length);
+
+    body.querySelectorAll('[data-edit]').forEach(button => {
+      button.addEventListener('click', () => openModal(Number(button.dataset.edit)));
+    });
+
+    body.querySelectorAll('[data-delete]').forEach(button => {
+      button.addEventListener('click', () => deleteRecord(Number(button.dataset.delete)));
+    });
+  }
+
+  function openModal(id = null) {
+    $('recordId').value = id || '';
+    $('modalTitle').textContent = id ? 'Edit Worklog' : 'Add Worklog';
+
+    if (id) {
+      const record = records.find(item => item.id === id);
+
+      if (!record) {
+        alert('Worklog entry could not be found.');
+        return;
+      }
+
+      $('workDate').value = record.date || '';
+      $('workTask').value = record.task || '';
+      $('workStatus').value = record.status || 'Active';
+    } else {
+      $('worklogForm').reset();
+      $('workStatus').value = 'Active';
+    }
+
+    $('modal').classList.remove('hidden');
+    $('workDate').focus();
+  }
+
+  function closeModal() {
+    $('modal').classList.add('hidden');
+  }
+
+  async function saveRecord(event) {
+    event.preventDefault();
+
+    const id = $('recordId').value.trim();
+    const payload = {
+      date: $('workDate').value,
+      task: $('workTask').value.trim(),
+      status: $('workStatus').value
+    };
+
+    if (!payload.date || !payload.task || !payload.status) {
+      alert('Please complete all fields.');
+      return;
+    }
+
+    const submitButton = $('worklogForm').querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+    submitButton.disabled = true;
+    submitButton.innerHTML = 'Saving…';
+
+    let result;
+
+    if (id) {
+      result = await supabaseClient
+        .from('worklog')
+        .update(payload)
+        .eq('id', Number(id));
+    } else {
+      result = await supabaseClient
+        .from('worklog')
+        .insert(payload);
+    }
+
+    submitButton.disabled = false;
+    submitButton.innerHTML = originalText;
+
+    if (result.error) {
+      console.error('Save error:', result.error);
+      alert('Could not save Worklog: ' + result.error.message);
+      return;
+    }
+
+    closeModal();
+    await loadRecords();
+  }
+
+  async function deleteRecord(id) {
+    const record = records.find(item => item.id === id);
+    if (!record) return;
+
+    if (!confirm('Delete this Worklog entry?\n\n' + record.task)) return;
+
+    const { error } = await supabaseClient
+      .from('worklog')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Delete error:', error);
+      alert('Could not delete Worklog: ' + error.message);
+      return;
+    }
+
+    await loadRecords();
+  }
+
+  $('loginForm').addEventListener('submit', async event => {
+    event.preventDefault();
+
+    const email = $('email').value.trim();
+    const password = $('password').value;
+
+    if (!email || !password) return;
+
+    setLoginMessage('Signing in…');
+
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error) {
+      console.error('Login error:', error);
+      setLoginMessage(error.message, 'error');
+      return;
+    }
+
+    // IMPORTANT: stay on admin.html and switch to the Worklog editor.
+    setLoginMessage('');
+    await showAdmin();
+  });
+
+  $('logoutBtn').addEventListener('click', async () => {
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+      console.error('Logout error:', error);
+      alert('Could not log out: ' + error.message);
+      return;
+    }
+
+    showLogin();
+  });
+
+  $('addBtn').addEventListener('click', () => openModal());
+  $('closeModal').addEventListener('click', closeModal);
+  $('cancelBtn').addEventListener('click', closeModal);
+
+  $('modal').addEventListener('click', event => {
+    if (
+      event.target === $('modal') ||
+      event.target.classList.contains('modal-backdrop')
+    ) {
+      closeModal();
+    }
+  });
+
+  $('worklogForm').addEventListener('submit', saveRecord);
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !$('modal').classList.contains('hidden')) {
+      closeModal();
+    }
+  });
+
+  supabaseClient.auth.onAuthStateChange((_event, session) => {
+    if (session) {
+      showAdmin();
+    } else {
+      showLogin();
+    }
+  });
+
+  init();
 </script>
 </body>
 </html>
