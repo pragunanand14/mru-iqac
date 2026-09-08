@@ -711,7 +711,18 @@
 
   const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+      // Keep the admin session only for this browser tab.
+      // Closing the tab clears sessionStorage, so the next tab/window
+      // requires the admin to sign in again.
+      auth: {
+        storage: window.sessionStorage,
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
   );
 
   const $ = (id) => document.getElementById(id);
