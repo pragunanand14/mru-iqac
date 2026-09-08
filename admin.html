@@ -713,14 +713,12 @@
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY,
     {
-      // Keep the admin session only for this browser tab.
-      // Closing the tab clears sessionStorage, so the next tab/window
-      // requires the admin to sign in again.
+      // Admin sessions are intentionally NOT persisted.
+      // Refreshing or closing the tab/browser requires a new login.
       auth: {
-        storage: window.sessionStorage,
-        persistSession: true,
+        persistSession: false,
         autoRefreshToken: true,
-        detectSessionInUrl: true
+        detectSessionInUrl: false
       }
     }
   );
