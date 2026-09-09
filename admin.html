@@ -393,6 +393,47 @@
     letter-spacing:0.3px;
   }
 
+
+  /* ---- Admin profile ---- */
+  .profile-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    padding:18px 20px;
+    margin-bottom:24px;
+    background:rgba(255,255,255,.92);
+    border:1px solid var(--border-grey);
+    border-radius:14px;
+    box-shadow:0 8px 24px rgba(20,32,55,.05);
+  }
+  .profile-main{display:flex;align-items:center;gap:14px;min-width:0}
+  .profile-avatar{
+    width:46px;height:46px;border-radius:50%;
+    display:grid;place-items:center;
+    flex:0 0 46px;
+    background:linear-gradient(135deg,var(--mr-navy-dark),var(--mr-maroon));
+    color:#fff;font-weight:800;font-size:16px;
+  }
+  .profile-info{min-width:0}
+  .profile-kicker{
+    display:block;font-size:9.5px;font-weight:800;
+    letter-spacing:1px;color:var(--text-muted);margin-bottom:3px;
+  }
+  .profile-name{font-size:17px;font-weight:750;color:var(--mr-navy-dark)}
+  .profile-email{
+    margin-top:2px;font-size:12.5px;color:var(--text-muted);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .profile-meta{
+    text-align:right;font-size:11.5px;color:var(--text-muted);
+  }
+  .profile-meta strong{display:block;color:var(--mr-maroon);font-size:12px;margin-bottom:2px}
+  @media (max-width:760px){
+    .profile-card{align-items:flex-start}
+    .profile-meta{text-align:left}
+  }
+
   /* ---- Dashboard head ---- */
   .dashboard-head{
     display:flex; align-items:flex-end; justify-content:space-between;
@@ -684,6 +725,21 @@
   </section>
 
   <section id="adminView" class="hidden">
+    <div id="profileCard" class="profile-card">
+      <div class="profile-main">
+        <div id="profileAvatar" class="profile-avatar">A</div>
+        <div class="profile-info">
+          <span class="profile-kicker">SIGNED IN AS</span>
+          <div id="profileName" class="profile-name">Administrator</div>
+          <div id="profileEmail" class="profile-email">—</div>
+        </div>
+      </div>
+      <div class="profile-meta">
+        <strong id="profileDesignation">IQAC Administrator</strong>
+        <span id="profileDepartment">Internal Quality Assurance Cell</span>
+      </div>
+    </div>
+
     <div class="dashboard-head">
       <div>
         <div class="eyebrow">WORKLOG MANAGEMENT</div>
@@ -764,6 +820,81 @@
   const $ = (id) => document.getElementById(id);
   let records = [];
 
+  let currentProfile = null;
+
+  function initials(name, email) {
+    const source = String(name || '').trim() || String(email || '').trim();
+    const parts = source.split(/\s+/).filter(Boolean);
+    if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+    return source.slice(0, 2).toUpperCase() || 'A';
+  }
+
+  async function loadProfile(session) {
+    const user = session?.user;
+    if (!user) return;
+
+    // The profile is tied to the Supabase Auth user by auth_user_id.
+    // If a profile does not exist yet, create a minimal one from the login email.
+    let { data, error } = await supabaseClient
+      .from('profiles')
+      .select('id,auth_user_id,name,email,designation,department')
+      .eq('auth_user_id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.warn('Profile lookup failed:', error);
+      // Still show the authenticated user's email so the panel remains usable.
+      renderProfile({
+        name: user.user_metadata?.full_name || 'Administrator',
+        email: user.email || '',
+        designation: 'IQAC Administrator',
+        department: 'Internal Quality Assurance Cell'
+      });
+      return;
+    }
+
+    if (!data) {
+      const fallbackName = user.user_metadata?.full_name || (user.email || 'Administrator').split('@')[0];
+      const { data: created, error: createError } = await supabaseClient
+        .from('profiles')
+        .insert({
+          auth_user_id: user.id,
+          name: fallbackName,
+          email: user.email || '',
+          designation: 'IQAC Administrator',
+          department: 'Internal Quality Assurance Cell'
+        })
+        .select('id,auth_user_id,name,email,designation,department')
+        .single();
+
+      if (createError) {
+        console.warn('Profile creation failed:', createError);
+        renderProfile({
+          name: fallbackName,
+          email: user.email || '',
+          designation: 'IQAC Administrator',
+          department: 'Internal Quality Assurance Cell'
+        });
+        return;
+      }
+      data = created;
+    }
+
+    currentProfile = data;
+    renderProfile(data);
+  }
+
+  function renderProfile(profile) {
+    const name = profile.name || 'Administrator';
+    const email = profile.email || '';
+    $('profileName').textContent = name;
+    $('profileEmail').textContent = email;
+    $('profileDesignation').textContent = profile.designation || 'IQAC Administrator';
+    $('profileDepartment').textContent = profile.department || 'Internal Quality Assurance Cell';
+    $('profileAvatar').textContent = initials(name, email);
+  }
+
+
   function setMessage(text, type = '') {
     const el = $('message');
     if (!el) return;
@@ -802,10 +933,11 @@
     $('logoutBtn').classList.add('hidden');
   }
 
-  async function showAdmin() {
+  async function showAdmin(session) {
     $('loginView').classList.add('hidden');
     $('adminView').classList.remove('hidden');
     $('logoutBtn').classList.remove('hidden');
+    await loadProfile(session);
     await loadRecords();
   }
 
@@ -820,7 +952,7 @@
       }
 
       if (data?.session) {
-        await showAdmin();
+        await showAdmin(data.session);
       } else {
         showLogin();
       }
