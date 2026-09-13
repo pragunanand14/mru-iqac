@@ -19,6 +19,33 @@
 .calendar-head{padding:13px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.month-title{font-size:15px;font-weight:800}.cal-grid{display:grid;grid-template-columns:repeat(7,1fr)}.cal-dow{padding:9px;background:#f7f8f9;border-bottom:1px solid var(--line);font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase}.cal-day{min-height:120px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:7px}.cal-day:nth-child(7n){border-right:0}.cal-num{font-size:10px;font-weight:800;color:#6b778c}.cal-day.today .cal-num{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:#fff}.cal-task{margin-top:6px;padding:5px 6px;background:#deebff;color:#0747a6;border-left:3px solid var(--blue);border-radius:4px;font-size:9px;line-height:1.25;cursor:pointer}.cal-task.over{background:#ffebe6;color:#ae2a19;border-left-color:#ae2a19}
 /* timeline */
 .timeline-head{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}.timeline-scroll{overflow:auto}.timeline{min-width:1000px}.timeline-row{display:grid;grid-template-columns:270px 1fr;border-bottom:1px solid var(--line2);min-height:58px}.timeline-label{padding:11px 12px;border-right:1px solid var(--line2)}.timeline-label b{font-size:10px;display:block}.timeline-label span{font-size:9px;color:var(--muted)}.timeline-axis{display:grid;grid-template-columns:repeat(14,1fr);border-bottom:1px solid var(--line);height:32px}.timeline-axis div{font-size:8px;color:var(--muted);padding:7px 4px;border-left:1px dashed #e4e6e8}.timeline-track{position:relative;height:57px;background:repeating-linear-gradient(90deg,transparent,transparent calc(100%/14 - 1px),#eef0f2 calc(100%/14));}.timeline-bar{position:absolute;top:17px;height:20px;border-radius:999px;background:#0c66e4;color:#fff;font-size:8px;font-weight:800;padding:4px 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer}.timeline-bar.p0{background:#8a1f2f}.timeline-bar.p1{background:#c78f28}.timeline-bar.p2{background:#5f789c}.timeline-bar.p3{background:#89919c}
+
+/* dashboard gantt */
+.gantt-surface{margin-bottom:14px;overflow:hidden}
+.gantt-head{padding:13px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.gantt-head-main strong{display:block;font-size:12px}.gantt-head-main span{display:block;font-size:9px;color:var(--muted);margin-top:3px}
+.gantt-scroll{overflow:auto}
+.gantt-grid{min-width:920px}
+.gantt-axis{display:grid;grid-template-columns:250px 1fr;border-bottom:1px solid var(--line);background:#f7f8f9}
+.gantt-axis-label{padding:9px 12px;font-size:9px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;border-right:1px solid var(--line)}
+.gantt-axis-track{position:relative;display:grid;min-height:38px}
+.gantt-axis-day{font-size:8px;color:var(--muted);padding:8px 4px;border-left:1px dashed #e4e6e8;white-space:nowrap}
+.gantt-row{display:grid;grid-template-columns:250px 1fr;min-height:54px;border-bottom:1px solid var(--line2)}
+.gantt-label{padding:9px 12px;border-right:1px solid var(--line2);min-width:0}
+.gantt-label button{border:0;background:transparent;padding:0;text-align:left;color:var(--navy);font-size:10px;font-weight:800;line-height:1.3;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gantt-label button:hover{color:var(--blue);text-decoration:underline}
+.gantt-label-meta{display:flex;align-items:center;gap:6px;margin-top:4px;font-size:8px;color:var(--muted)}
+.gantt-track{position:relative;min-height:54px;background:repeating-linear-gradient(90deg,transparent,transparent calc(100%/14 - 1px),#eef0f2 calc(100%/14))}
+.gantt-today{position:absolute;top:0;bottom:0;width:2px;background:#c78f28;opacity:.85;z-index:2}
+.gantt-bar{position:absolute;top:15px;height:24px;border-radius:999px;background:#dfe7f2;border:1px solid #c8d3e1;overflow:hidden;cursor:pointer;min-width:28px}
+.gantt-bar:hover{box-shadow:0 3px 10px rgba(9,30,66,.12)}
+.gantt-bar-fill{position:absolute;inset:0 auto 0 0;background:#0c66e4;border-radius:999px 0 0 999px}
+.gantt-bar.p0 .gantt-bar-fill{background:#8a1f2f}.gantt-bar.p1 .gantt-bar-fill{background:#c78f28}.gantt-bar.p2 .gantt-bar-fill{background:#5f789c}.gantt-bar.p3 .gantt-bar-fill{background:#89919c}
+.gantt-bar-text{position:absolute;inset:0;display:flex;align-items:center;padding:0 8px;color:#fff;font-size:8px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 2px rgba(0,0,0,.2)}
+.gantt-empty{padding:24px;text-align:center;color:var(--muted);font-size:11px}
+.gantt-legend{display:flex;align-items:center;gap:10px;font-size:8px;color:var(--muted);white-space:nowrap}.gantt-legend i{display:inline-block;width:9px;height:9px;border-radius:2px;background:#0c66e4;margin-right:4px;vertical-align:-1px}
+@media(max-width:900px){.gantt-grid{min-width:850px}.gantt-axis,.gantt-row{grid-template-columns:210px 1fr}.gantt-label{padding-left:9px;padding-right:9px}}
+
 /* detail drawer */
 .drawer-backdrop{position:fixed;inset:0;background:rgba(9,30,66,.42);z-index:90}.drawer{position:fixed;top:0;right:0;width:min(760px,96vw);height:100vh;background:#fff;z-index:91;box-shadow:-12px 0 36px rgba(9,30,66,.18);display:flex;flex-direction:column}.drawer-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}.drawer-title{flex:1;min-width:0}.drawer-title h2{font:700 25px/1.2 'Playfair Display',serif;margin:9px 0 5px;color:var(--navy)}.drawer-title p{margin:0;color:var(--muted);font-size:11px}.close{width:32px;height:32px;border:1px solid var(--line);background:#fff;border-radius:6px;font-size:20px;color:#44546f}.drawer-tabs{display:flex;border-bottom:1px solid var(--line);padding:0 20px;gap:2px}.drawer-tab{border:0;background:transparent;padding:11px 10px;font-size:11px;font-weight:800;color:var(--muted);border-bottom:2px solid transparent}.drawer-tab.active{color:var(--navy);border-color:var(--maroon)}.drawer-body{overflow:auto;padding:18px 20px 36px}.task-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}.summary-cell{background:#f7f8f9;border:1px solid var(--line);border-radius:7px;padding:9px}.summary-cell span{display:block;font-size:8px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:800}.summary-cell b{display:block;font-size:11px;margin-top:5px}.section-title{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:#42526e;margin:18px 0 9px}.description-box{padding:11px;border:1px solid var(--line);border-radius:7px;color:#42526e;font-size:11px;line-height:1.6;background:#fff}.activity{display:grid;gap:10px}.activity-item{display:flex;gap:9px;position:relative}.activity-dot{width:24px;height:24px;border-radius:50%;background:#e9edf2;display:grid;place-items:center;font-size:9px;font-weight:800;color:#42526e;flex:0 0 auto}.activity-card{border:1px solid var(--line);border-radius:7px;padding:9px;flex:1;background:#fff}.activity-card .meta{font-size:9px;color:var(--muted);margin-bottom:5px}.activity-card .body{font-size:11px;line-height:1.5}.comment-form{margin-top:12px;display:grid;gap:7px}.comment-form textarea{min-height:88px}.file-list{display:grid;gap:7px}.file-item{border:1px solid var(--line);border-radius:7px;padding:10px;display:flex;align-items:center;gap:9px}.file-icon{width:30px;height:30px;border-radius:6px;background:#deebff;color:#0747a6;display:grid;place-items:center;font-weight:800;font-size:11px}.file-main{flex:1;min-width:0}.file-main b{font-size:10px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.file-main span{font-size:9px;color:var(--muted)}.link{color:var(--blue);font-size:10px;font-weight:800}.action-strip{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.transition-row{display:grid;grid-template-columns:1fr auto;gap:7px;align-items:end}.watch-toggle{border:1px solid var(--line);background:#fff;border-radius:6px;padding:7px 10px;font-size:10px;font-weight:800}.watch-toggle.on{background:#eae6ff;color:#403294;border-color:#c8befa}.watcher-list{display:flex;gap:5px;flex-wrap:wrap}.watcher-pill{padding:5px 7px;border-radius:999px;background:#f1f2f4;color:#42526e;font-size:9px;font-weight:700}
 /* admin settings */
@@ -28,13 +55,90 @@
 @media(max-width:900px){.shell{grid-template-columns:1fr}.sidebar{position:fixed;left:-248px;z-index:100;width:248px;transition:left .25s ease}.sidebar.open{left:0}.topbar{padding:0 12px}.mobile-nav{display:grid!important}.content{padding:16px 12px 40px}.kpis{grid-template-columns:repeat(2,1fr)}.auth-card{grid-template-columns:1fr}.auth-copy{display:none}.auth-panel{padding:34px}.task-summary{grid-template-columns:repeat(2,1fr)}.settings-grid{grid-template-columns:1fr}}
 @media(max-width:600px){.kpis{grid-template-columns:1fr 1fr}.page-head{align-items:flex-start;flex-direction:column}.head-actions{width:100%}.head-actions .btn{flex:1}.toolbar{align-items:stretch}.toolbar .search-mini{width:100%}.view-tabs{margin-left:0;width:100%}.view-tab{flex:1}.task-summary{grid-template-columns:1fr 1fr}.top-link{display:none}}
 .mobile-nav{display:none;border:0;background:#fff;color:var(--navy);font-size:18px;padding:8px}.search-mini{display:none}
+
+/* Refined sign-in experience */
+.auth-shell{position:relative;overflow:hidden;min-height:100vh;padding:36px 24px;background:linear-gradient(135deg,#071a32 0%,#0b2343 46%,#f3f5f8 46%,#f3f5f8 100%)}
+.auth-shell:before,.auth-shell:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);pointer-events:none}
+.auth-shell:before{width:560px;height:560px;left:-220px;top:-250px;background:radial-gradient(circle,rgba(199,154,61,.20),transparent 68%)}
+.auth-shell:after{width:520px;height:520px;right:-220px;bottom:-230px;background:radial-gradient(circle,rgba(122,17,37,.14),transparent 68%)}
+.auth-card{position:relative;z-index:1;width:min(1080px,100%);min-height:650px;display:grid;grid-template-columns:1.08fr .92fr;background:rgba(255,255,255,.97);border:1px solid rgba(255,255,255,.42);border-radius:20px;box-shadow:0 30px 90px rgba(4,18,38,.28);overflow:hidden}
+.auth-brand-panel{position:relative;padding:44px 48px;background:linear-gradient(155deg,#081d39 0%,#0c294d 52%,#112f54 100%);color:#fff;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.auth-brand-panel:before{content:"";position:absolute;inset:auto -100px -130px auto;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(199,154,61,.18),transparent 68%)}
+.auth-brand-panel:after{content:"";position:absolute;width:220px;height:220px;right:-55px;top:-70px;border-radius:50%;border:1px solid rgba(255,255,255,.08);box-shadow:0 0 0 28px rgba(255,255,255,.025),0 0 0 56px rgba(255,255,255,.018)}
+.auth-logo-wrap{position:relative;z-index:1;display:flex;align-items:center;gap:16px}
+.auth-logo{width:194px;height:62px;object-fit:contain;object-position:left center;filter:brightness(0) invert(1);opacity:.98}
+.auth-logo-copy{border-left:1px solid rgba(255,255,255,.18);padding-left:16px}
+.auth-logo-copy strong{display:block;font-size:10px;letter-spacing:1.3px;color:#f1d78e}
+.auth-logo-copy span{display:block;font-size:11px;color:rgba(255,255,255,.72);margin-top:5px}
+.auth-brand-content{position:relative;z-index:1;max-width:460px}
+.auth-brand-content .eyebrow{color:#f1d78e;background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
+.auth-brand-content h1{font:700 47px/1.05 'Playfair Display',serif;margin:22px 0 16px;letter-spacing:-.6px}
+.auth-brand-content h1 em{color:#f1d78e;font-style:normal}
+.auth-brand-content p{font-size:14px;line-height:1.8;color:rgba(255,255,255,.74);max-width:430px}
+.auth-highlights{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:28px}
+.auth-highlight{padding:11px 12px;border:1px solid rgba(255,255,255,.10);border-radius:10px;background:rgba(255,255,255,.045);backdrop-filter:blur(5px)}
+.auth-highlight b{display:block;font-size:11px;color:#fff}.auth-highlight span{display:block;font-size:9px;color:rgba(255,255,255,.56);margin-top:3px;line-height:1.35}
+.auth-secure{position:relative;z-index:1;display:flex;align-items:center;gap:9px;font-size:10px;color:rgba(255,255,255,.62);padding-top:22px;border-top:1px solid rgba(255,255,255,.08)}
+.auth-secure i{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:rgba(216,176,93,.12);color:#f1d78e;font-style:normal}
+.auth-panel{padding:54px 52px;display:flex;flex-direction:column;justify-content:center;background:#fff}
+.auth-panel-top{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.auth-panel .eyebrow{margin-bottom:14px}
+.auth-panel h2{font-size:30px;margin:0 0 7px}
+.auth-panel .auth-subtitle{font-size:13px;color:var(--muted);line-height:1.6;margin:0}
+.auth-status{font-size:9px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:var(--green);background:var(--greenSoft);border:1px solid #bce8d5;padding:6px 8px;border-radius:999px;white-space:nowrap}
+.auth-form{display:grid;gap:14px;margin-top:30px}
+.auth-field{display:grid;gap:7px}
+.auth-field label{font-size:11px;font-weight:800;color:#344563}
+.auth-input-wrap{position:relative}.auth-input-wrap .auth-input-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;color:#8190a6;pointer-events:none}
+.auth-input{width:100%;border:1px solid #d8dde5;background:#fbfcfd;border-radius:10px;padding:13px 13px 13px 36px;color:var(--text);outline:none;transition:.18s ease}
+.auth-input:focus{background:#fff;border-color:var(--blue);box-shadow:0 0 0 4px rgba(12,102,228,.10)}
+.auth-submit{width:100%;margin-top:4px;padding:12px 15px;font-size:12px;border-radius:10px;box-shadow:0 10px 20px rgba(122,17,37,.18)}
+.auth-submit:hover{transform:translateY(-1px)}
+.auth-divider{display:flex;align-items:center;gap:10px;color:#9aa5b4;font-size:9px;margin:20px 0 2px}.auth-divider:before,.auth-divider:after{content:"";height:1px;background:#e8ebf0;flex:1}
+.auth-note{display:flex;gap:9px;align-items:flex-start;padding:11px 12px;border:1px solid #eceff3;border-radius:10px;background:#fafbfc;color:#758196;font-size:10px;line-height:1.5}
+.auth-note strong{display:block;color:#42526e;font-size:10px;margin-bottom:2px}
+.auth-footer{margin-top:25px;padding-top:15px;border-top:1px solid #eceff3;display:flex;justify-content:space-between;gap:10px;font-size:9px;color:#8a94a4}
+.auth-footer b{color:#566579}
+@media(max-width:900px){.auth-shell{background:#eef1f5;padding:18px}.auth-card{grid-template-columns:1fr;min-height:auto}.auth-brand-panel{padding:30px 28px;min-height:420px}.auth-panel{padding:34px 28px}.auth-brand-content h1{font-size:38px}.auth-highlights{grid-template-columns:1fr 1fr 1fr}.auth-logo{width:170px;height:54px}}
+@media(max-width:560px){.auth-shell{padding:10px}.auth-brand-panel{padding:24px 20px;min-height:400px}.auth-panel{padding:28px 20px}.auth-logo-wrap{align-items:flex-start}.auth-logo{width:160px;height:50px}.auth-logo-copy{display:none}.auth-brand-content h1{font-size:33px}.auth-highlights{grid-template-columns:1fr;gap:7px}.auth-highlight{display:flex;align-items:center;gap:8px}.auth-highlight span{margin-top:0}.auth-panel-top{display:block}.auth-status{display:inline-flex;margin-top:14px}.auth-footer{display:block}.auth-footer span{display:block;margin-top:4px}}
 </style>
 </head>
 <body>
 <div id="authView" class="auth-shell">
   <div class="auth-card">
-    <div class="auth-copy"><span class="eyebrow">MRU · IQAC WORKSPACE</span><h1>Run the worklog like a <em>real operations system.</em></h1><p>Tasks, ownership, priority, workflow, deliverables, remarks, deadlines and activity — organised in one workspace for the Internal Quality Assurance Cell.</p></div>
-    <div class="auth-panel"><span class="eyebrow">Secure sign in</span><h2>IQAC administration</h2><p>Use your authorised Supabase account.</p><form id="loginForm" class="form" onsubmit="return handleLogin(event)"><div class="field"><label>Email</label><input id="email" type="email" autocomplete="username" required></div><div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password" required></div><button class="btn primary" type="submit">Sign in →</button><div id="loginMsg" class="msg"></div></form></div>
+    <section class="auth-brand-panel">
+      <div class="auth-logo-wrap">
+        <img class="auth-logo" src="mru-logo.png" alt="Manav Rachna University">
+        <div class="auth-logo-copy"><strong>IQAC WORKSPACE</strong><span>Internal Quality Assurance Cell</span></div>
+      </div>
+      <div class="auth-brand-content">
+        <span class="eyebrow">MANAV RACHNA UNIVERSITY · IQAC</span>
+        <h1>Run quality work with <em>clarity.</em></h1>
+        <p>One workspace for tasks, ownership, priorities, workflow, deadlines, deliverables and progress — built for the day-to-day operations of the IQAC.</p>
+        <div class="auth-highlights">
+          <div class="auth-highlight"><b>Plan</b><span>Dates, priorities &amp; workload</span></div>
+          <div class="auth-highlight"><b>Track</b><span>Status, progress &amp; activity</span></div>
+          <div class="auth-highlight"><b>Deliver</b><span>Remarks &amp; submissions</span></div>
+        </div>
+      </div>
+      <div class="auth-secure"><i>✓</i><span>Restricted workspace · Authorised IQAC accounts only</span></div>
+    </section>
+
+    <section class="auth-panel">
+      <div class="auth-panel-top">
+        <div><span class="eyebrow">SECURE SIGN IN</span><h2>Welcome back.</h2><p class="auth-subtitle">Sign in to continue to the IQAC administration workspace.</p></div>
+        <span class="auth-status">Protected</span>
+      </div>
+      <form id="loginForm" class="auth-form" onsubmit="return handleLogin(event)">
+        <div class="auth-field"><label for="email">Email address</label><div class="auth-input-wrap"><span class="auth-input-icon">@</span><input class="auth-input" id="email" type="email" autocomplete="username" placeholder="you@example.com" required></div></div>
+        <div class="auth-field"><label for="password">Password</label><div class="auth-input-wrap"><span class="auth-input-icon">●</span><input class="auth-input" id="password" type="password" autocomplete="current-password" placeholder="Enter your password" required></div></div>
+        <button class="btn primary auth-submit" type="submit">Sign in to IQAC →</button>
+        <div id="loginMsg" class="msg"></div>
+      </form>
+      <div class="auth-divider"><span>WORKSPACE ACCESS</span></div>
+      <div class="auth-note"><span>◈</span><div><strong>Internal use only</strong>Your account determines the workspace role and the actions available to you.</div></div>
+      <div class="auth-footer"><b>Manav Rachna University · IQAC</b><span>Internal Quality Assurance Cell</span></div>
+    </section>
   </div>
 </div>
 
@@ -72,6 +176,7 @@
           <div class="kpis"><div class="kpi"><div class="label">Total work</div><strong id="kpiTotal">—</strong><span>Published work items</span></div><div class="kpi"><div class="label">In progress</div><strong id="kpiProgress">—</strong><span>Currently active</span></div><div class="kpi"><div class="label">Under review</div><strong id="kpiReview">—</strong><span>Waiting for review</span></div><div class="kpi"><div class="label">Completed</div><strong id="kpiDone">—</strong><span>Finished work</span></div><div class="kpi"><div class="label">Overdue</div><strong id="kpiOverdue">—</strong><span>Past end date</span></div><div class="kpi"><div class="label">P0 / P1</div><strong id="kpiHigh">—</strong><span>High-priority work</span></div></div>
           <div id="schemaNotice" class="notice">Jira-style activity/workflow support needs the optional IQAC automation SQL migration. Core worklog and task updates still work without it.</div>
           <div class="toolbar"><div class="toolbar-group"><button class="quick-filter active" data-qf="all">All work</button><button class="quick-filter" data-qf="mine">My work</button><button class="quick-filter" data-qf="due">Due soon</button><button class="quick-filter" data-qf="overdue">Overdue</button><button class="quick-filter" data-qf="high">P0 / P1</button></div><div class="view-tabs"><button class="view-tab active" data-switch="list">List</button><button class="view-tab" data-switch="board">Board</button><button class="view-tab" data-switch="calendar">Calendar</button><button class="view-tab" data-switch="timeline">Timeline</button></div></div>
+          <div id="dashboardGantt" class="surface gantt-surface"></div>
           <div id="overviewSurface" class="surface"></div>
         </section>
 
@@ -212,7 +317,52 @@ async function addRemark(id){const text=$('drawerCommentText')?.value.trim();if(
 async function uploadDrawerFile(id){const file=$('drawerFileInput')?.files?.[0];if(!file)return setMsg($('drawerFileMsg'),'Choose a file first.');const r=records.find(x=>x.id===id);if(!r||r.owner_auth_user_id!==currentProfile?.auth_user_id)return setMsg($('drawerFileMsg'),'Only the assigned member can upload deliverables.');const safe=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');const path=`${id}-${currentProfile.auth_user_id}-${Date.now()}-${safe}`;const up=await supabaseClient.storage.from('task-deliverables').upload(path,file,{upsert:false});if(up.error)return setMsg($('drawerFileMsg'),up.error.message);const ins=await supabaseClient.from('task_updates').insert({task_id:id,author_auth_user_id:currentProfile.auth_user_id,status:'Deliverable',update_text:'Uploaded deliverable: '+file.name,attachment_path:path});if(ins.error){await supabaseClient.storage.from('task-deliverables').remove([path]);return setMsg($('drawerFileMsg'),ins.error.message)}setMsg($('drawerFileMsg'),'Deliverable uploaded.',true);await refreshAll();await loadDrawerData(id)}
 async function transitionTask(id,next){const r=records.find(x=>x.id===id);if(!r)return;if(currentProfile?.role!=='admin')return toast('Members can add progress, but task workflow is admin-controlled.');const old=normalizeStatus(r);const payload={workflow_status:next,status:publicStatusFor(next)};if(!('workflow_status'in r))payload.status=publicStatusFor(next);const{error}=await supabaseClient.from('worklog').update(payload).eq('id',id);if(error){toast('Workflow status needs the optional SQL migration.');return}await logActivity(id,'Status changed',`${old} → ${next}`);toast('Task transitioned');await refreshAll();await loadDrawerData(id)}
 function renderCurrent(){if(view==='overview')renderOverview();if(view==='board')renderBoard();if(view==='list')renderList();if(view==='calendar')renderCalendar();if(view==='timeline')renderTimeline();if(view==='mywork')renderMyWork();if(view==='activity')renderActivityPage();if(view==='profile')renderProfile();if(view==='settings')renderSettings()}
-function renderOverview(){updateKpis();$('overviewSurface').innerHTML=buildListMarkup(applyFilters(records),true)}
+
+function workflowProgress(r){
+  const status=normalizeStatus(r);
+  const map={Backlog:0,Assigned:15,'In Progress':50,'Under Review':75,'Revision Required':60,Approved:90,Completed:100};
+  return map[status] ?? 0;
+}
+
+function renderDashboardGantt(){
+  const el=$('dashboardGantt');
+  if(!el)return;
+  const rows=applyFilters(records).filter(r=>r.start_date||r.date||r.end_date);
+  if(!rows.length){
+    el.innerHTML='<div class="gantt-head"><div class="gantt-head-main"><strong>Gantt progress</strong><span>Task duration and workflow progress at a glance.</span></div></div><div class="gantt-empty">Add start/end dates to see tasks on the Gantt chart.</div>';
+    return;
+  }
+  const startDates=rows.map(r=>r.start_date||r.date||r.end_date).filter(Boolean).map(x=>new Date(x+'T00:00:00'));
+  const endDates=rows.map(r=>r.end_date||r.start_date||r.date).filter(Boolean).map(x=>new Date(x+'T23:59:59'));
+  let minDate=new Date(Math.min(...startDates));
+  let maxDate=new Date(Math.max(...endDates));
+  minDate.setDate(minDate.getDate()-2); maxDate.setDate(maxDate.getDate()+2);
+  const dayMs=86400000;
+  const totalDays=Math.max(14,Math.ceil((maxDate-minDate)/dayMs));
+  if(Math.ceil((maxDate-minDate)/dayMs)<14) maxDate=new Date(minDate.getTime()+14*dayMs);
+  const days=Array.from({length:totalDays},(_,i)=>{const d=new Date(minDate);d.setDate(minDate.getDate()+i);return d});
+  const today=new Date();today.setHours(0,0,0,0);
+  const todayOffset=(today-minDate)/dayMs;
+  const todayPct=todayOffset>=0&&todayOffset<=totalDays?(todayOffset/totalDays)*100:null;
+  const gridCols=`repeat(${totalDays},minmax(42px,1fr))`;
+  const axis=days.map(d=>`<div class="gantt-axis-day">${d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'})}</div>`).join('');
+  const rowsHtml=rows.slice(0,60).map(r=>{
+    const s=new Date((r.start_date||r.date||r.end_date)+'T00:00:00');
+    const e=new Date((r.end_date||r.start_date||r.date)+'T23:59:59');
+    const startOffset=Math.max(0,(s-minDate)/dayMs);
+    const endOffset=Math.max(startOffset+1,(e-minDate)/dayMs+1);
+    const left=Math.max(0,Math.min(100,(startOffset/totalDays)*100));
+    const width=Math.max(.8,Math.min(100-left,((endOffset-startOffset)/totalDays)*100));
+    const progress=workflowProgress(r);
+    const p=String(r.priority||'P2').toLowerCase();
+    const status=normalizeStatus(r);
+    return `<div class="gantt-row"><div class="gantt-label"><button data-open-task="${r.id}">${esc(r.title)}</button><div class="gantt-label-meta"><span>#IQAC-${r.id}</span><span>·</span><span>${esc(status)}</span><span>·</span><b>${progress}%</b></div></div><div class="gantt-track" style="background:repeating-linear-gradient(90deg,transparent,transparent calc(${100/totalDays}% - 1px),#eef0f2 calc(${100/totalDays}%))">${todayPct!==null?`<div class="gantt-today" style="left:${todayPct}%"></div>`:''}<div class="gantt-bar ${p}" style="left:${left}%;width:${width}%" data-open-task="${r.id}" title="${esc(r.title)} · ${progress}% complete"><div class="gantt-bar-fill" style="width:${progress}%"></div><div class="gantt-bar-text">${esc(r.title)}</div></div></div></div>`;
+  }).join('');
+  el.innerHTML=`<div class="gantt-head"><div class="gantt-head-main"><strong>Gantt progress</strong><span>Task duration with workflow-based progress. Gold line = today.</span></div><div class="gantt-legend"><span><i></i>Progress</span><span>${rows.length} task${rows.length===1?'':'s'}</span></div></div><div class="gantt-scroll"><div class="gantt-grid"><div class="gantt-axis"><div class="gantt-axis-label">Work item</div><div class="gantt-axis-track" style="grid-template-columns:${gridCols}">${axis}</div></div>${rowsHtml}</div></div>`;
+  wireListEvents(el);
+}
+
+function renderOverview(){updateKpis();renderDashboardGantt();$('overviewSurface').innerHTML=buildListMarkup(applyFilters(records),true)}
 function buildListMarkup(rows,compact=false){if(!rows.length)return'<div class="empty">No work items match the current filters.</div>';return`<table class="list-table"><thead><tr><th style="width:8px"></th><th>Task</th><th>Description</th><th>Priority</th><th>Status</th><th>Owner</th><th>Due</th><th style="text-align:right">Actions</th></tr></thead><tbody>${rows.map(r=>{const due=dueInfo(r),s=normalizeStatus(r),owner=ownerName(r.owner_auth_user_id);return`<tr><td class="priority-cell"><div class="priority-bar ${String(r.priority||'P2').toLowerCase()}" title="${esc(r.priority||'P2')}"></div></td><td><button class="task-title-btn" data-open-task="${r.id}">${esc(r.title)}</button><div class="task-key">#IQAC-${r.id}</div></td><td class="desc">${esc(r.description)}</td><td><span class="badge ${String(r.priority||'P2')==='P0'?'status-revision':String(r.priority||'P2')==='P1'?'status-review':String(r.priority||'P2')==='P2'?'status-assigned':'status-backlog'}">${esc(r.priority||'P2')}</span></td><td><span class="badge ${statusClass(s)}">${esc(s)}</span></td><td><div class="owner"><span class="tiny-avatar">${esc(initials(owner).slice(0,2))}</span>${esc(owner)}</div></td><td class="${due.cls}">${esc(due.text)}</td><td><div class="row-actions"><button class="icon-btn" title="Open" data-open-task="${r.id}">↗</button>${currentProfile?.role==='admin'?`<button class="icon-btn" title="Edit" data-edit-task="${r.id}">✎</button>`:''}</div></td></tr>`}).join('')}</tbody></table>`}
 function wireListEvents(root){root.querySelectorAll('[data-open-task]').forEach(b=>b.addEventListener('click',()=>openDrawer(Number(b.dataset.openTask))));root.querySelectorAll('[data-edit-task]').forEach(b=>b.addEventListener('click',()=>openTaskModal(Number(b.dataset.editTask))));}
 function renderList(){const rows=applyFilters(records);$('listSurface').innerHTML=buildListMarkup(rows);wireListEvents($('listSurface'));populateOwnerFilter()}
