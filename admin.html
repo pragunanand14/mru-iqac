@@ -172,11 +172,69 @@ function closeTaskModal(){$('taskModal').classList.add('hidden');$('taskModalPan
 async function saveTask(e){e.preventDefault();if(currentProfile?.role!=='admin')return;const id=Number($('editId').value)||null,start=$('taskStart').value,end=$('taskEnd').value,title=$('taskTitle').value.trim(),description=$('taskDescription').value.trim(),workflow=$('taskWorkflow').value;if(!start||!title||!description)return setMsg($('taskFormMsg'),'Complete the required fields.');if(end&&end<start)return setMsg($('taskFormMsg'),'End date cannot be before start date.');const payload={date:start,start_date:start,end_date:end||null,title,description,status:$('taskPublicStatus').value,priority:$('taskPriority').value,owner_auth_user_id:$('taskOwner').value||null,workflow_status:workflow};let res=id?await supabaseClient.from('worklog').update(payload).eq('id',id):await supabaseClient.from('worklog').insert(payload).select('id').single();if(res.error&&/workflow_status/i.test(res.error.message||'')){delete payload.workflow_status;res=id?await supabaseClient.from('worklog').update(payload).eq('id',id):await supabaseClient.from('worklog').insert(payload)}if(res.error){return setMsg($('taskFormMsg'),res.error.message)}const taskId=id||res.data?.id;if(taskId)await logActivity(taskId,id?'Task updated':'Task created',`${title}`);closeTaskModal();toast(id?'Task updated':'Task created');await refreshAll()}
 async function deleteTask(id){if(currentProfile?.role!=='admin')return;const r=records.find(x=>x.id===id);if(!r||!confirm(`Delete task #IQAC-${id}?\n\n${r.title}`))return;const res=await supabaseClient.from('worklog').delete().eq('id',id);if(res.error)return toast(res.error.message);closeDrawer();toast('Task deleted');await refreshAll()}
 async function logActivity(taskId,action,details){const res=await supabaseClient.from('worklog_activity').insert({task_id:taskId,actor_auth_user_id:currentProfile?.auth_user_id||null,action,details});return !res.error}
-async function showLogin(){currentSession=null;currentProfile=null;$('authView').classList.remove('hidden');$('appView').classList.add('hidden')}
-async function showApp(session){currentSession=session;$('authView').classList.add('hidden');$('appView').classList.remove('hidden');armHistory();const{data,error}=await supabaseClient.from('profiles').select('id,auth_user_id,name,email,designation,department,role').eq('auth_user_id',session.user.id).maybeSingle();if(error||!data){await showLogin();return}currentProfile=data;await refreshAll();const h=location.hash.slice(1);const initial=['overview','board','list','calendar','timeline','mywork','activity','profile','settings'].includes(h)?h:(localStorage.getItem('iqac_default_view')||'overview');setView(initial,false)}
-$('loginForm').addEventListener('submit',async e=>{e.preventDefault();setMsg($('loginMsg'),'Signing in…');const res=await supabaseClient.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(res.error){setMsg($('loginMsg'),res.error.message);return}setMsg($('loginMsg'),'');await showApp(res.data.session)});
-$('logoutBtn').addEventListener('click',async()=>{await supabaseClient.auth.signOut();showLogin()});$('refreshBtn').addEventListener('click',async()=>{await refreshAll();toast('Workspace refreshed')});$('addTaskBtn').addEventListener('click',()=>openTaskModal());$('taskModalClose').addEventListener('click',closeTaskModal);$('taskCancel').addEventListener('click',closeTaskModal);$('taskForm').addEventListener('submit',saveTask);$('drawerClose').addEventListener('click',closeDrawer);$('drawerBackdrop').addEventListener('click',closeDrawer);document.querySelectorAll('[data-dtab]').forEach(b=>b.addEventListener('click',()=>drawerTab(b.dataset.dtab)));document.querySelectorAll('.nav-item[data-view]').forEach(b=>b.addEventListener('click',()=>{setView(b.dataset.view,true);$('sidebar').classList.remove('open')}));document.querySelectorAll('[data-switch]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.switch,true)));document.querySelectorAll('[data-qf]').forEach(b=>b.addEventListener('click',()=>{quickFilter=b.dataset.qf;document.querySelectorAll('[data-qf]').forEach(x=>x.classList.toggle('active',x.dataset.qf===quickFilter));renderCurrent()}));$('globalSearch').addEventListener('input',e=>{searchTerm=e.target.value;renderCurrent()});$('statusFilter').addEventListener('change',renderCurrent);$('priorityFilter').addEventListener('change',renderCurrent);$('ownerFilter').addEventListener('change',renderCurrent);$('prevMonth').addEventListener('click',()=>{calendarCursor.setMonth(calendarCursor.getMonth()-1);renderCalendar()});$('nextMonth').addEventListener('click',()=>{calendarCursor.setMonth(calendarCursor.getMonth()+1);renderCalendar()});$('defaultViewSetting').addEventListener('change',e=>{localStorage.setItem('iqac_default_view',e.target.value);toast('Default view saved')});$('mobileNav').addEventListener('click',()=> $('sidebar').classList.toggle('open'));window.addEventListener('popstate',e=>{const s=e.state;if(s?.iqacAdmin){setView(s.view||'overview',false)}else{history.pushState({iqacAdmin:true,view:view},'',location.href.split('#')[0]+'#'+view)}});document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('taskDrawer').classList.contains('hidden'))closeDrawer();if(!$('taskModalPanel').classList.contains('hidden'))closeTaskModal()}});supabaseClient.auth.onAuthStateChange((_e,s)=>{if(s&&!currentProfile)showApp(s);if(!s)showLogin()});
-(async function init(){const s=await supabaseClient.auth.getSession();if(s.data?.session)await showApp(s.data.session);else showLogin()})();
+let openingUserId=null;
+async function showLogin(message=''){currentSession=null;currentProfile=null;openingUserId=null;$('authView').classList.remove('hidden');$('appView').classList.add('hidden');if(message)setMsg($('loginMsg'),message)}
+async function showApp(session){
+  if(!session?.user)return;
+  if(openingUserId===session.user.id && currentProfile)return;
+  openingUserId=session.user.id;
+  currentSession=session;
+  $('authView').classList.add('hidden');
+  $('appView').classList.remove('hidden');
+  armHistory();
+
+  let profileResult;
+  try{
+    profileResult=await supabaseClient
+      .from('profiles')
+      .select('id,auth_user_id,name,email,designation,department,role')
+      .eq('auth_user_id',session.user.id)
+      .maybeSingle();
+  }catch(err){
+    profileResult={data:null,error:err};
+  }
+
+  if(profileResult.error){
+    console.error('Profile load error:',profileResult.error);
+  }
+
+  if(profileResult.data){
+    currentProfile=profileResult.data;
+  }else{
+    // Never bounce a successfully authenticated user back to the login screen.
+    // The dashboard can still open while the profile issue is shown clearly.
+    const email=session.user.email||'';
+    currentProfile={
+      id:null,
+      auth_user_id:session.user.id,
+      name:session.user.user_metadata?.full_name||email.split('@')[0]||'User',
+      email,
+      designation:'IQAC Member',
+      department:'Internal Quality Assurance Cell',
+      role:email.toLowerCase()==='mru.iqac@gmail.com'?'admin':'member'
+    };
+    toast(profileResult.error ? 'Signed in, but profile could not be loaded.' : 'Signed in. Complete your profile to unlock all workspace features.');
+  }
+
+  try{await refreshAll()}catch(err){console.error('Workspace load error:',err);toast('Signed in, but some workspace data could not be loaded.')}
+  const h=location.hash.slice(1);
+  const initial=['overview','board','list','calendar','timeline','mywork','activity','profile','settings'].includes(h)?h:(localStorage.getItem('iqac_default_view')||'overview');
+  setView(initial,false);
+  openingUserId=null;
+}
+$('loginForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const email=$('email').value.trim();
+  const password=$('password').value;
+  if(!email||!password)return;
+  setMsg($('loginMsg'),'Signing in…');
+  const res=await supabaseClient.auth.signInWithPassword({email,password});
+  if(res.error){setMsg($('loginMsg'),res.error.message);return}
+  setMsg($('loginMsg'),'');
+  if(res.data?.session)await showApp(res.data.session);
+});
+$('logoutBtn').addEventListener('click',async()=>{await supabaseClient.auth.signOut();showLogin()});$('refreshBtn').addEventListener('click',async()=>{await refreshAll();toast('Workspace refreshed')});$('addTaskBtn').addEventListener('click',()=>openTaskModal());$('taskModalClose').addEventListener('click',closeTaskModal);$('taskCancel').addEventListener('click',closeTaskModal);$('taskForm').addEventListener('submit',saveTask);$('drawerClose').addEventListener('click',closeDrawer);$('drawerBackdrop').addEventListener('click',closeDrawer);document.querySelectorAll('[data-dtab]').forEach(b=>b.addEventListener('click',()=>drawerTab(b.dataset.dtab)));document.querySelectorAll('.nav-item[data-view]').forEach(b=>b.addEventListener('click',()=>{setView(b.dataset.view,true);$('sidebar').classList.remove('open')}));document.querySelectorAll('[data-switch]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.switch,true)));document.querySelectorAll('[data-qf]').forEach(b=>b.addEventListener('click',()=>{quickFilter=b.dataset.qf;document.querySelectorAll('[data-qf]').forEach(x=>x.classList.toggle('active',x.dataset.qf===quickFilter));renderCurrent()}));$('globalSearch').addEventListener('input',e=>{searchTerm=e.target.value;renderCurrent()});$('statusFilter').addEventListener('change',renderCurrent);$('priorityFilter').addEventListener('change',renderCurrent);$('ownerFilter').addEventListener('change',renderCurrent);$('prevMonth').addEventListener('click',()=>{calendarCursor.setMonth(calendarCursor.getMonth()-1);renderCalendar()});$('nextMonth').addEventListener('click',()=>{calendarCursor.setMonth(calendarCursor.getMonth()+1);renderCalendar()});$('defaultViewSetting').addEventListener('change',e=>{localStorage.setItem('iqac_default_view',e.target.value);toast('Default view saved')});$('mobileNav').addEventListener('click',()=> $('sidebar').classList.toggle('open'));window.addEventListener('popstate',e=>{const s=e.state;if(s?.iqacAdmin){setView(s.view||'overview',false)}else{history.pushState({iqacAdmin:true,view:view},'',location.href.split('#')[0]+'#'+view)}});document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('taskDrawer').classList.contains('hidden'))closeDrawer();if(!$('taskModalPanel').classList.contains('hidden'))closeTaskModal()}});supabaseClient.auth.onAuthStateChange((_e,s)=>{if(s&&!currentProfile)void showApp(s);if(!s)void showLogin()});
+(async function init(){try{const s=await supabaseClient.auth.getSession();if(s.error){console.error('Session error:',s.error);showLogin(s.error.message);return}if(s.data?.session)await showApp(s.data.session);else showLogin()}catch(err){console.error('Initialisation error:',err);showLogin(err.message||'Could not initialise the workspace.')}})();
 </script>
 </body>
 </html>
