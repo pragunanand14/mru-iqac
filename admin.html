@@ -34,7 +34,7 @@
 <div id="authView" class="auth-shell">
   <div class="auth-card">
     <div class="auth-copy"><span class="eyebrow">MRU · IQAC WORKSPACE</span><h1>Run the worklog like a <em>real operations system.</em></h1><p>Tasks, ownership, priority, workflow, deliverables, remarks, deadlines and activity — organised in one workspace for the Internal Quality Assurance Cell.</p></div>
-    <div class="auth-panel"><span class="eyebrow">Secure sign in</span><h2>IQAC administration</h2><p>Use your authorised Supabase account.</p><form id="loginForm" class="form"><div class="field"><label>Email</label><input id="email" type="email" autocomplete="username" required></div><div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password" required></div><button class="btn primary" type="submit">Sign in →</button><div id="loginMsg" class="msg"></div></form></div>
+    <div class="auth-panel"><span class="eyebrow">Secure sign in</span><h2>IQAC administration</h2><p>Use your authorised Supabase account.</p><form id="loginForm" class="form" onsubmit="return handleLogin(event)"><div class="field"><label>Email</label><input id="email" type="email" autocomplete="username" required></div><div class="field"><label>Password</label><input id="password" type="password" autocomplete="current-password" required></div><button class="btn primary" type="submit">Sign in →</button><div id="loginMsg" class="msg"></div></form></div>
   </div>
 </div>
 
@@ -108,9 +108,36 @@
 <div id="toast" style="position:fixed;right:18px;bottom:18px;z-index:120;display:none;background:#172b4d;color:#fff;padding:10px 13px;border-radius:7px;font-size:11px;box-shadow:0 10px 24px rgba(9,30,66,.25)"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js?v=6"></script>
+<script src="config.js?v=7"></script>
 <script>
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
+window.__iqacSupabaseClient = window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
+window.__iqacLoginBootstrap = true;
+async function handleLogin(e){
+  if(e)e.preventDefault();
+  const email=(document.getElementById('email')?.value||'').trim();
+  const password=document.getElementById('password')?.value||'';
+  const msg=document.getElementById('loginMsg');
+  const btn=document.querySelector('#loginForm button[type=submit]');
+  const say=(t,ok=false)=>{if(msg){msg.textContent=t;msg.className='msg'+(ok?' success':'')}};
+  if(!email||!password){say('Enter your email and password.');return false}
+  if(btn){btn.disabled=true;btn.textContent='Signing in…'}
+  say('Signing in…');
+  try{
+    const {data,error}=await window.__iqacSupabaseClient.auth.signInWithPassword({email,password});
+    if(error){console.error('Login error:',error);say(error.message||'Could not sign in.');return false}
+    if(!data?.session){say('Authentication succeeded but no session was returned.');return false}
+    say('Signed in.',true);
+    // Reveal immediately; main application initialisation will hydrate the workspace.
+    document.getElementById('authView')?.classList.add('hidden');
+    document.getElementById('appView')?.classList.remove('hidden');
+    if(typeof window.__iqacShowApp==='function') await window.__iqacShowApp(data.session);
+  }catch(err){console.error('Login exception:',err);say(err?.message||'Could not sign in.')}
+  finally{if(btn){btn.disabled=false;btn.textContent='Sign in →'}}
+  return false;
+}
+</script>
+<script>
+const supabaseClient=window.__iqacSupabaseClient;
 const $=id=>document.getElementById(id);
 let currentSession=null,currentProfile=null,records=[],profiles=[],activities=[],view='overview',quickFilter='all',searchTerm='',calendarCursor=new Date();
 const statusNames=['Backlog','Assigned','In Progress','Under Review','Revision Required','Approved','Completed'];
@@ -224,23 +251,7 @@ async function showApp(session){
   catch(err){console.error('Workspace load error:',err);toast('Signed in. Some workspace data could not be loaded.')}
   openingUserId=null;
 }
-$('loginForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-  const email=$('loginEmail')?.value?.trim() || $('email')?.value?.trim() || '';
-  const password=$('loginPassword')?.value || $('password')?.value || '';
-  if(!email||!password)return;
-  const btn=e.submitter;
-  if(btn){btn.disabled=true;btn.textContent='Signing in…'}
-  setMsg($('loginMsg'),'Signing in…');
-  try{
-    const res=await supabaseClient.auth.signInWithPassword({email,password});
-    if(res.error){console.error('Login error:',res.error);setMsg($('loginMsg'),res.error.message);return}
-    setMsg($('loginMsg'),'');
-    if(res.data?.session) await showApp(res.data.session);
-  }catch(err){console.error('Login exception:',err);setMsg($('loginMsg'),err?.message||'Could not sign in.')}finally{
-    if(btn){btn.disabled=false;btn.textContent='Sign in →'}
-  }
-});
+
 $('logoutBtn').addEventListener('click',async()=>{await supabaseClient.auth.signOut();showLogin()});$('refreshBtn').addEventListener('click',async()=>{await refreshAll();toast('Workspace refreshed')});$('addTaskBtn').addEventListener('click',()=>openTaskModal());$('taskModalClose').addEventListener('click',closeTaskModal);$('taskCancel').addEventListener('click',closeTaskModal);$('taskForm').addEventListener('submit',saveTask);$('drawerClose').addEventListener('click',closeDrawer);$('drawerBackdrop').addEventListener('click',closeDrawer);document.querySelectorAll('[data-dtab]').forEach(b=>b.addEventListener('click',()=>drawerTab(b.dataset.dtab)));document.querySelectorAll('.nav-item[data-view]').forEach(b=>b.addEventListener('click',()=>{setView(b.dataset.view,true);$('sidebar').classList.remove('open')}));document.querySelectorAll('[data-switch]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.switch,true)));document.querySelectorAll('[data-qf]').forEach(b=>b.addEventListener('click',()=>{quickFilter=b.dataset.qf;document.querySelectorAll('[data-qf]').forEach(x=>x.classList.toggle('active',x.dataset.qf===quickFilter));renderCurrent()}));$('globalSearch').addEventListener('input',e=>{searchTerm=e.target.value;renderCurrent()});$('statusFilter').addEventListener('change',renderCurrent);$('priorityFilter').addEventListener('change',renderCurrent);$('ownerFilter').addEventListener('change',renderCurrent);$('prevMonth').addEventListener('click',()=>{calendarCursor.setMonth(calendarCursor.getMonth()-1);renderCalendar()});$('nextMonth').addEventListener('click',()=>{calendarCursor.setMonth(calendarCursor.getMonth()+1);renderCalendar()});$('defaultViewSetting').addEventListener('change',e=>{localStorage.setItem('iqac_default_view',e.target.value);toast('Default view saved')});$('mobileNav').addEventListener('click',()=> $('sidebar').classList.toggle('open'));window.addEventListener('popstate',e=>{const s=e.state;if(s?.iqacAdmin){setView(s.view||'overview',false)}else{history.pushState({iqacAdmin:true,view:view},'',location.href.split('#')[0]+'#'+view)}});document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(!$('taskDrawer').classList.contains('hidden'))closeDrawer();if(!$('taskModalPanel').classList.contains('hidden'))closeTaskModal()}});supabaseClient.auth.onAuthStateChange((event,session)=>{
   if(event==='SIGNED_OUT') void showLogin();
 });
