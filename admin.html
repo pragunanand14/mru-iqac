@@ -117,13 +117,13 @@ function initSupabase(){
   if(!window.supabase){
     throw new Error('Supabase library failed to load.');
   }
-  if(typeof SUPABASE_URL !== 'string' || !SUPABASE_URL || typeof SUPABASE_PUBLISHABLE_KEY !== 'string' || !SUPABASE_PUBLISHABLE_KEY){
+  if(typeof window.SUPABASE_URL !== 'string' || !window.SUPABASE_URL || typeof window.SUPABASE_PUBLISHABLE_KEY !== 'string' || !window.SUPABASE_PUBLISHABLE_KEY){
     throw new Error('config.js failed to load.');
   }
   if(!supabaseClient){
     supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY,
+      window.SUPABASE_URL,
+      window.SUPABASE_PUBLISHABLE_KEY,
       {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}}
     );
   }
