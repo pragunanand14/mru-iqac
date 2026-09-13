@@ -108,10 +108,35 @@
 <div id="toast" style="position:fixed;right:18px;bottom:18px;z-index:120;display:none;background:#172b4d;color:#fff;padding:10px 13px;border-radius:7px;font-size:11px;box-shadow:0 10px 24px rgba(9,30,66,.25)"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js?v=7"></script>
+<script src="config.js"></script>
 <script>
-window.__iqacSupabaseClient = window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
-window.__iqacLoginBootstrap = true;
+let supabaseClient = null;
+let supabaseInitError = null;
+
+function initSupabase(){
+  if(!window.supabase){
+    throw new Error('Supabase library failed to load.');
+  }
+  if(typeof SUPABASE_URL !== 'string' || !SUPABASE_URL || typeof SUPABASE_PUBLISHABLE_KEY !== 'string' || !SUPABASE_PUBLISHABLE_KEY){
+    throw new Error('config.js failed to load.');
+  }
+  if(!supabaseClient){
+    supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY,
+      {auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}}
+    );
+  }
+  return supabaseClient;
+}
+
+try{
+  initSupabase();
+}catch(err){
+  supabaseInitError = err;
+  console.error('Supabase initialisation error:',err);
+}
+
 async function handleLogin(e){
   if(e)e.preventDefault();
   const email=(document.getElementById('email')?.value||'').trim();
@@ -119,25 +144,38 @@ async function handleLogin(e){
   const msg=document.getElementById('loginMsg');
   const btn=document.querySelector('#loginForm button[type=submit]');
   const say=(t,ok=false)=>{if(msg){msg.textContent=t;msg.className='msg'+(ok?' success':'')}};
+
   if(!email||!password){say('Enter your email and password.');return false}
   if(btn){btn.disabled=true;btn.textContent='Signing in…'}
   say('Signing in…');
+
   try{
-    const {data,error}=await window.__iqacSupabaseClient.auth.signInWithPassword({email,password});
-    if(error){console.error('Login error:',error);say(error.message||'Could not sign in.');return false}
-    if(!data?.session){say('Authentication succeeded but no session was returned.');return false}
+    const client = initSupabase();
+    const {data,error}=await client.auth.signInWithPassword({email,password});
+    if(error){
+      console.error('Login error:',error);
+      say(error.message||'Could not sign in.');
+      return false;
+    }
+    if(!data?.session){
+      say('Authentication succeeded but no session was returned.');
+      return false;
+    }
     say('Signed in.',true);
-    // Reveal immediately; main application initialisation will hydrate the workspace.
     document.getElementById('authView')?.classList.add('hidden');
     document.getElementById('appView')?.classList.remove('hidden');
-    if(typeof window.__iqacShowApp==='function') await window.__iqacShowApp(data.session);
-  }catch(err){console.error('Login exception:',err);say(err?.message||'Could not sign in.')}
-  finally{if(btn){btn.disabled=false;btn.textContent='Sign in →'}}
+    await showApp(data.session);
+  }catch(err){
+    console.error('Login exception:',err);
+    say(err?.message||'Could not sign in.');
+  }finally{
+    if(btn){btn.disabled=false;btn.textContent='Sign in →'}
+  }
   return false;
 }
 </script>
 <script>
-const supabaseClient=window.__iqacSupabaseClient;
+
 const $=id=>document.getElementById(id);
 let currentSession=null,currentProfile=null,records=[],profiles=[],activities=[],view='overview',quickFilter='all',searchTerm='',calendarCursor=new Date();
 const statusNames=['Backlog','Assigned','In Progress','Under Review','Revision Required','Approved','Completed'];
