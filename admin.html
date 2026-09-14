@@ -355,6 +355,86 @@ html[data-theme="midnight"] #taskModalPanel>div{background:#101d2f!important;col
 #bootScreen{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#07182d;color:#fff;transition:opacity .22s ease}#bootScreen.hide{opacity:0;pointer-events:none}.boot-inner{text-align:center}.boot-mark{width:54px;height:54px;border-radius:15px;margin:0 auto 14px;background:linear-gradient(145deg,#8c2038,#5a0e1e);display:grid;place-items:center;font-weight:900;box-shadow:0 14px 40px rgba(0,0,0,.28)}.boot-inner strong{display:block;font-size:12px;letter-spacing:.8px}.boot-inner span{display:block;margin-top:5px;font-size:9px;color:#9fb0c5}
 @media(max-width:600px){.theme-choice{grid-template-columns:1fr}.theme-option{display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center}.theme-preview{grid-row:span 2;margin:0}}
 </style>
+
+<style id="admin-redesign-v3">
+:root{
+  --r-bg:#f4f6fa;--r-panel:rgba(255,255,255,.88);--r-panel-solid:#fff;
+  --r-ink:#182033;--r-muted:#718096;--r-line:rgba(25,35,55,.10);
+  --r-brand:#7b1730;--r-brand2:#a52a47;--r-navy:#111c36;--r-gold:#c79a3b;
+  --r-shadow:0 18px 55px rgba(20,31,55,.10);--r-radius:20px;
+}
+html[data-theme="dark"]{
+  --r-bg:#080d18;--r-panel:rgba(17,25,43,.90);--r-panel-solid:#11192b;
+  --r-ink:#edf2ff;--r-muted:#91a0ba;--r-line:rgba(255,255,255,.09);
+  --r-shadow:0 22px 65px rgba(0,0,0,.34);
+}
+body{background:
+ radial-gradient(circle at 8% -10%,rgba(165,42,71,.11),transparent 30%),
+ radial-gradient(circle at 92% 0%,rgba(199,154,59,.10),transparent 26%),
+ var(--r-bg)!important;color:var(--r-ink)!important}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:linear-gradient(rgba(90,100,120,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(90,100,120,.035) 1px,transparent 1px);background-size:34px 34px;z-index:-1}
+#appShell,.app-shell{background:transparent!important}
+.sidebar,.side-nav,.app-sidebar{
+  border-right:1px solid var(--r-line)!important;
+  background:linear-gradient(180deg,#101a32 0%,#0b1224 100%)!important;
+  box-shadow:18px 0 45px rgba(8,15,30,.12)!important
+}
+.sidebar *,.side-nav *,.app-sidebar *{color:inherit}
+.nav-item,.side-item,.sidebar a{
+  border-radius:13px!important;margin:4px 10px!important;transition:.2s ease!important
+}
+.nav-item:hover,.side-item:hover,.sidebar a:hover{background:rgba(255,255,255,.075)!important;transform:translateX(2px)}
+.nav-item.active,.side-item.active,.sidebar a.active{
+  background:linear-gradient(90deg,rgba(165,42,71,.34),rgba(165,42,71,.08))!important;
+  box-shadow:inset 3px 0 var(--r-gold)!important
+}
+.topbar,.top-bar,.header{
+  background:rgba(255,255,255,.76)!important;backdrop-filter:blur(18px)!important;
+  border-bottom:1px solid var(--r-line)!important;box-shadow:0 8px 35px rgba(20,31,55,.055)!important
+}
+html[data-theme="dark"] .topbar,html[data-theme="dark"] .top-bar,html[data-theme="dark"] .header{background:rgba(8,13,24,.72)!important}
+.surface,.card,.panel,.kpi,.widget,.task-card,.drawer,.modal,.calendar,.timeline,.board-column,.table-wrap,.chat-panel,.profile-card,.settings-card{
+  background:var(--r-panel)!important;border:1px solid var(--r-line)!important;
+  box-shadow:var(--r-shadow)!important;border-radius:var(--r-radius)!important;
+  backdrop-filter:blur(18px)
+}
+.kpi{position:relative;overflow:hidden}
+.kpi:after{content:"";position:absolute;right:-35px;top:-35px;width:110px;height:110px;border-radius:50%;background:rgba(165,42,71,.07)}
+button,.btn{
+  border-radius:12px!important;transition:transform .16s ease,box-shadow .16s ease,background .16s ease!important
+}
+button:hover,.btn:hover{transform:translateY(-1px)}
+input,textarea,select{
+  border-radius:12px!important;border:1px solid var(--r-line)!important;
+  background:var(--r-panel-solid)!important;color:var(--r-ink)!important
+}
+table{border-collapse:separate!important;border-spacing:0 6px!important}
+thead th{color:var(--r-muted)!important;text-transform:uppercase;letter-spacing:.07em;font-size:11px!important}
+tbody tr{background:var(--r-panel-solid)!important;box-shadow:0 3px 15px rgba(20,31,55,.035)!important}
+tbody td:first-child{border-radius:12px 0 0 12px}tbody td:last-child{border-radius:0 12px 12px 0}
+.board-column{padding:14px!important}
+.task-card{box-shadow:0 8px 24px rgba(20,31,55,.07)!important;border-radius:16px!important}
+.task-card:hover{transform:translateY(-3px);box-shadow:0 15px 34px rgba(20,31,55,.12)!important}
+.drawer{border-radius:24px 0 0 24px!important}
+.chat-panel{overflow:hidden}
+.chat-panel .chat-messages,.chat-messages{scrollbar-width:thin}
+.chat-panel .chat-input,.chat-composer,.message-composer{
+  border-top:1px solid var(--r-line)!important;background:rgba(255,255,255,.72)!important;backdrop-filter:blur(18px)
+}
+html[data-theme="dark"] .chat-panel .chat-input,html[data-theme="dark"] .chat-composer,html[data-theme="dark"] .message-composer{background:rgba(11,18,34,.72)!important}
+.online-pill{box-shadow:0 0 0 4px rgba(41,184,103,.08)!important}
+.modal-backdrop{backdrop-filter:blur(8px)!important;background:rgba(6,10,20,.48)!important}
+@media(max-width:900px){
+ .sidebar,.side-nav,.app-sidebar{width:78px!important}
+ .main,.content,.app-main{margin-left:78px!important}
+}
+@media(max-width:650px){
+ .sidebar,.side-nav,.app-sidebar{width:0!important;overflow:hidden!important}
+ .main,.content,.app-main{margin-left:0!important}
+ .drawer{width:100%!important;border-radius:0!important}
+}
+</style>
+
 </head>
 <body>
 <div id="bootScreen"><div class="boot-inner"><div class="boot-mark">MR</div><strong>IQAC CONTROL CENTRE</strong><span>Restoring your workspace…</span></div></div>
@@ -738,5 +818,44 @@ $('refreshBtn').addEventListener('click',async()=>{const b=$('refreshBtn');if(b.
   finally{const boot=$('bootScreen');if(boot){boot.classList.add('hide');setTimeout(()=>boot.remove(),260)}}
 })();
 </script>
+
+<script id="chat-keyboard-fix-v3">
+(function(){
+  function isChatComposer(el){
+    if(!el || el.tagName !== 'TEXTAREA') return false;
+    const s=((el.id||'')+' '+(el.className||'')+' '+(el.placeholder||'')).toLowerCase();
+    return /chat|message|reply|type.*message/.test(s);
+  }
+  document.addEventListener('keydown',function(e){
+    const el=e.target;
+    if(!isChatComposer(el)) return;
+    if(e.key==='Enter' && !e.shiftKey){
+      e.preventDefault();
+      const form=el.closest('form');
+      const send= form && form.querySelector('button[type="submit"],button');
+      if(form){
+        if(typeof form.requestSubmit==='function') form.requestSubmit();
+        else form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+      }else if(send){
+        send.click();
+      }
+      setTimeout(function(){
+        el.focus();
+        try{el.setSelectionRange(el.value.length,el.value.length)}catch(_){}
+      },0);
+    }
+  },true);
+  document.addEventListener('click',function(e){
+    const b=e.target.closest && e.target.closest('button');
+    if(!b) return;
+    const t=((b.textContent||'')+' '+(b.getAttribute('aria-label')||'')).toLowerCase();
+    if(/send/.test(t)){
+      const box=b.closest('form')?.querySelector('textarea');
+      if(box) setTimeout(()=>box.focus(),0);
+    }
+  },true);
+})();
+</script>
+
 </body>
 </html>
