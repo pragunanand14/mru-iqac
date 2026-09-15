@@ -359,7 +359,7 @@ html[data-theme="midnight"] .activity-dot,html[data-theme="midnight"] .file-icon
 html[data-theme="midnight"] .view-tab.active{background:#17263a;color:#fff}html[data-theme="midnight"] .quick-filter.active{background:#172b4b;border-color:#345a91;color:#a9c7ff}
 html[data-theme="midnight"] #taskModalPanel>div{background:#101d2f!important;color:#eef3fa}
 .theme-choice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.theme-option{border:1px solid #e1e6ed;background:#fff;border-radius:13px;padding:13px;text-align:left;cursor:pointer;transition:.2s ease;position:relative}.theme-option:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(16,24,39,.08)}.theme-option.active{border-color:var(--maroon);box-shadow:0 0 0 2px rgba(121,21,42,.10)}.theme-preview{height:54px;border-radius:9px;margin-bottom:10px;position:relative;overflow:hidden}.theme-preview.day{background:linear-gradient(135deg,#f7f9fc,#fff)}.theme-preview.night{background:linear-gradient(135deg,#07172b,#12253d)}.theme-preview:after{content:"";position:absolute;left:9px;right:9px;bottom:8px;height:7px;border-radius:5px;background:linear-gradient(90deg,#7a152b 0 32%,#c7a15a 32% 43%,#cfd8e5 43%)}.theme-option strong{display:block;font-size:11px}.theme-option span{display:block;font-size:9px;color:#7b8798;margin-top:3px}.theme-check{position:absolute;right:10px;top:10px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:#eef2f6;color:#748196;font-size:10px}.theme-option.active .theme-check{background:var(--maroon);color:#fff}
-#bootScreen{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#07182d;color:#fff;transition:opacity .22s ease}#bootScreen.hide{opacity:0;pointer-events:none}.boot-inner{text-align:center}.boot-mark{width:54px;height:54px;border-radius:15px;margin:0 auto 14px;background:linear-gradient(145deg,#8c2038,#5a0e1e);display:grid;place-items:center;font-weight:900;box-shadow:0 14px 40px rgba(0,0,0,.28)}.boot-inner strong{display:block;font-size:12px;letter-spacing:.8px}.boot-inner span{display:block;margin-top:5px;font-size:9px;color:#9fb0c5}
+
 @media(max-width:600px){.theme-choice{grid-template-columns:1fr}.theme-option{display:grid;grid-template-columns:90px 1fr;gap:10px;align-items:center}.theme-preview{grid-row:span 2;margin:0}}
 </style>
 
@@ -513,7 +513,6 @@ html[data-theme="midnight"] [style*="background:linear-gradient(145deg,#fff"],ht
 
 </head>
 <body>
-<div id="bootScreen"><div class="boot-inner"><div class="boot-mark">MR</div><strong>IQAC CONTROL CENTRE</strong><span>Restoring your workspace…</span></div></div>
 <div id="authView" class="auth-shell">
   <div class="auth-card">
     <section class="auth-brand-panel">
@@ -910,7 +909,6 @@ $('refreshBtn').addEventListener('click',async()=>{const b=$('refreshBtn');if(b.
     if(s.data?.session) await showApp(s.data.session);
     else showLogin();
   }catch(err){console.error('Initialisation error:',err);showLogin(err.message||'Could not initialise the workspace.')}
-  finally{const boot=$('bootScreen');if(boot){boot.classList.add('hide');setTimeout(()=>boot.remove(),260)}}
 })();
 </script>
 
